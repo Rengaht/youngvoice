@@ -2,6 +2,7 @@
 var snake_scale;
 var _vel='right';
 var _last_vel='right';
+var _shadow_offset;
 
 var _body=[];
 var snake_stop=true;
@@ -9,12 +10,12 @@ var _angle={'left':0,'right':180,'up':90,'down':270};
 var _last_ms;
 var _snake_text_style;
 
-var _img_body=[];
+var _img_body=[],_shadow_body=[];
 var _img_food=[];
-var _img_head=[];
+var _img_head=[],_shadow_head=[];
 
 var _food=[];
-var _container_food,_container_snake;
+var _container_food,_container_snake,_container_shadow;
 var _food_scale;
 
 var _food_pattern=[[{x:0,y:0},{x:0,y:1}],
@@ -34,43 +35,46 @@ function updateSnake(delta){
 	else return;
 
 	var pos={x:0,y:0};
-
-	for(var i=0;i<_body.length;++i){
-		if(i==0){
-			pos.x=_body[0].x;
-			pos.y=_body[0].y;
+	let len=_body.length;
+	
+	pos.x=_body[len-1].x;
+	pos.y=_body[len-1].y;
 			
-			if(_vel==='left') _body[i].x-=1;
-			else if(_vel==='up') _body[i].y-=1;
-			else if(_vel==='right') _body[i].x+=1;
-			else if(_vel==='down') _body[i].y+=1;
+	if(_vel==='left') _body[len-1].x-=1;
+	else if(_vel==='up') _body[len-1].y-=1;
+	else if(_vel==='right') _body[len-1].x+=1;
+	else if(_vel==='down') _body[len-1].y+=1;
 
-			ang=_angle[_vel];
+	ang=_angle[_vel];
+	_last_vel=_vel;
 
-			
-			_last_vel=_vel;
-
-			if(checkSnakePos()){
-				_body[i].x=pos.x;
-				_body[i].y=pos.y;
-				break;
-			}
-
-		}else{
+	if(checkSnakePos()){
+		_body[len-1].x=pos.x;
+		_body[len-1].y=pos.y;
+		
+	}else{
+		//len=_body.length;
+		for(var i=_body.length-2;i>=0;--i){
 			let newpos={x:_body[i].x,y:_body[i].y};
 			_body[i].x=pos.x;
 			_body[i].y=pos.y;
 			
 			pos.x=newpos.x;
 			pos.y=newpos.y;
-
 		}
 	}
-	
+	// len=_body.length;
 	for(var i=0;i<_body.length;++i){
-		if(i==0) setSnakeHead(_container_snake.children[0],_body[0],ang);
-		else if(i!=_body.length-1) setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i));
-		else setSnakeTail(_container_snake.children[i],_body[i],calTailDirection());
+		if(i==_body.length-1){
+			setSnakeHead(_container_snake.children[i],_body[i],ang);
+			setSnakeHead(_container_shadow.children[i],_body[i],ang,true);		
+		}else if(i!=0){
+			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i));
+			setSnakeBody(_container_shadow.children[i],_body[i],calBodyDirection(i),true);
+		}else{
+			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection());
+			setSnakeTail(_container_shadow.children[i],_body[i],calTailDirection(),true);		
+		} 
 	}	
 
 
@@ -79,8 +83,12 @@ function updateSnake(delta){
 
 function initSnake(){
 
+	
 	_container_food=new Container();
 	_container_game.addChild(_container_food);
+	
+	_container_shadow=new Container();
+	_container_game.addChild(_container_shadow);
 	
 	_container_snake=new Container();
 	_container_game.addChild(_container_snake);
@@ -89,7 +97,10 @@ function initSnake(){
   _img_head.push(new Texture.from('img/snake/head-eat.png'));
   _img_head.push(new Texture.from('img/snake/head-dead.png'));
 
-  
+  _shadow_head.push(new Texture.from('img/snake/shadow-normal.png'));
+  _shadow_head.push(new Texture.from('img/snake/shadow-eat.png'));
+  _shadow_head.push(new Texture.from('img/snake/shadow-dead.png'));
+	  
 
   _img_body.push(new Texture.from('img/snake/body-horizontal.png'));
   _img_body.push(new Texture.from('img/snake/body-vertical.png'));
@@ -98,7 +109,13 @@ function initSnake(){
   _img_body.push(new Texture.from('img/snake/body-right-top.png'));
   _img_body.push(new Texture.from('img/snake/body-right-bottom.png'));
   
-
+  _shadow_body.push(new Texture.from('img/snake/shadow-horizontal.png'));
+  _shadow_body.push(new Texture.from('img/snake/shadow-vertical.png'));
+  _shadow_body.push(new Texture.from('img/snake/shadow-left-top.png'));
+  _shadow_body.push(new Texture.from('img/snake/shadow-left-bottom.png'));
+  _shadow_body.push(new Texture.from('img/snake/shadow-right-top.png'));
+  _shadow_body.push(new Texture.from('img/snake/shadow-right-bottom.png'));
+  
 
   // resetSnake();
 
@@ -161,56 +178,96 @@ function resetBodyPos(len){
   for(var i=0;i<len;++i)
   	_body.push({x:startx-i,y:starty});
 
+ 
 }
 function resetSnake(sentence_){
+  
   resetBodyPos(sentence_.length);
   _container_snake.removeChildren();
-	
+  _container_shadow.removeChildren();
+
+
   let head_container=new Container();
+  let shead_container=new Container();
+  let shead=new Sprite(_shadow_head[0]);
   let head=new Sprite(_img_head[0]);
 
   snake_scale=gwid/(head.width/115*60);
+  _shadow_offset=gwid/60*5;
   
   head.pivot.set(head.width,head.height/2);
   head.scale.set(snake_scale,snake_scale);
   head._zIndex=10;
   
+  shead.pivot.set(shead.width,shead.height/2);
+  shead.scale.set(snake_scale,snake_scale);
+  shead._zIndex=10;
+  
+  shead_container.addChild(shead);
   head_container.addChild(head);
+
   setSnakeHead(head_container,_body[0],180);
+  setSnakeHead(shead_container,_body[0],180,true);
   
   _container_snake.addChild(head_container);
+  _container_shadow.addChild(shead_container);
   
   
   let len=_body.length;
 
   for(var i=0;i<len-2;++i){
+  	//let container_=new Container();
   	let container_=new Container();
-
+  	let scontainer_=new Container();
+  	
   	let b_=new Sprite(_img_body[0]);
   	b_.scale.set(snake_scale,snake_scale);
   	b_._zIndex=0;
   	
+  	let s_=new Sprite(_shadow_body[0]);
+  	s_.scale.set(snake_scale,snake_scale);
+  	s_._zIndex=-10;
+  	
   	let tt=(i<sentence_.length)?sentence_[i]:'...';
   	let text_=new PIXI.Text(tt,_snake_text_style);
+  	text_._zIndex=10;
+
+  	scontainer_.addChild(s_);
   	container_.addChild(b_);
   	container_.addChild(text_);
   	setSnakeBody(container_,_body[i+1],calBodyDirection(i+1));
+  	setSnakeBody(scontainer_,_body[i+1],calBodyDirection(i+1),true);
 
 
   	_container_snake.addChild(container_);
+  	_container_shadow.addChild(scontainer_);
   }
 
   let tail_container=new Container();
+  let stail_container=new Container();
 
   let tail=new Sprite(resources['img/snake/tail.png'].texture);
   tail.pivot.set(tail.width,tail.height/2);
   tail.scale.set(snake_scale,snake_scale);
   tail._zIndex=0;
   
+  let stail=new Sprite(resources['img/snake/shadow-tail.png'].texture);
+  stail.pivot.set(stail.width,stail.height/2);
+  stail.scale.set(snake_scale,snake_scale);
+  stail._zIndex=0;
+  
+  
+  stail_container.addChild(stail);
   tail_container.addChild(tail);
   setSnakeTail(tail_container,_body[len-1],0);
+  setSnakeTail(stail_container,_body[len-1],0,true);
   
   _container_snake.addChild(tail_container);
+  _container_shadow.addChild(stail_container);
+
+  _container_snake.children.reverse();
+  _container_shadow.children.reverse();
+ _body.reverse();
 
 }
 function resetGame(){
@@ -230,58 +287,69 @@ function startGame(){
 function pauseGame(){
 	snake_stop=true;
 }
-function setSnakeHead(container_,pt,angle){
-
-  let sprite_=container_.children[0];
-  sprite_.angle=angle;
-  
-  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation);
-  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation);
-  
+function setSnakeHead(container_,pt,angle,isshadow=false){
+  // for(var i in container_.children){
+	  let sprite_=container_.children[0];
+	  sprite_.angle=angle;
+	  
+	  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation)+(isshadow?_shadow_offset:0);
+	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?_shadow_offset:0);
+  // }
 }
-function setSnakeBody(container_,pt,direction){
+function setSnakeBody(container_,pt,direction,isshadow=false){
+
+	try{
 	let sprite_=container_.children[0];
-	switch(direction){
+
+	
+	switch(direction[0]){
 		case 'horiz': 
-			sprite_.texture=_img_body[0];
+			sprite_.texture=!isshadow?_img_body[0]:_shadow_body[0];
 			break;
 		case 'vert': 
-			sprite_.texture=_img_body[1];
+			sprite_.texture=!isshadow?_img_body[1]:_shadow_body[1];
 			break;
 		case 'left-top': 
-			sprite_.texture=_img_body[2];
+			sprite_.texture=!isshadow?_img_body[2]:_shadow_body[2];
 			break;
 		case 'left-bottom': 
-			sprite_.texture=_img_body[3];
+			sprite_.texture=!isshadow?_img_body[3]:_shadow_body[3];
 			break;
 		case 'right-top': 
-			sprite_.texture=_img_body[4];
+			sprite_.texture=!isshadow?_img_body[4]:_shadow_body[4];
 			break;
 		case 'right-bottom': 
-			sprite_.texture=_img_body[5];
+			sprite_.texture=!isshadow?_img_body[5]:_shadow_body[5];
 			break;
 	}
 
-	sprite_.x=gwid*pt.x;
-	sprite_.y=gwid*pt.y;
+	sprite_.x=gwid*pt.x+(isshadow?_shadow_offset:0);
+	sprite_.y=gwid*pt.y+(isshadow?_shadow_offset:0);
 
-	let text_=container_.children[1];
-  	text_.x=sprite_.x+sprite_.width/2-text_.width/2;
-  	text_.y=sprite_.y+sprite_.height/2-text_.height/2;
+	if(container_.children.length>1){
+		let text_=container_.children[1];
+	  	text_.x=sprite_.x+sprite_.width/2-text_.width/2;
+	  	text_.y=sprite_.y+sprite_.height/2-text_.height/2;
+	  	// text_.angle=direction[1];
+  	}
+  }catch(err){
+  	console.log(err);
+  }
 }
-function setSnakeTail(container_,pt,angle){
-  let sprite_=container_.children[0];
-	
-  sprite_.angle=angle;
-  
-  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation);
-  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation);
-  
+function setSnakeTail(container_,pt,angle,isshadow=false){
+  // for(var i in container_.children){
+	  let sprite_=container_.children[0];
+	  	
+	  sprite_.angle=angle;
+	  
+	  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation)+(isshadow?_shadow_offset:0);
+	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?_shadow_offset:0);
+  // }
 
 }
 
 function checkSnakePos(){
-	let pos_={x:_body[0].x,y:_body[0].y};
+	let pos_={x:_body[_body.length-1].x,y:_body[_body.length-1].y};
 	
 	/* check boundary */
 	if(pos_.x<0 || pos_.y<0 ||pos_.x>=mgridx ||pos_.y>=mgridy){
@@ -290,7 +358,7 @@ function checkSnakePos(){
 	} 
 	
 	/* check tail */
-	for(var i=1;i<_body.length;++i){
+	for(var i=0;i<_body.length-1;++i){
 		if(pos_.x==_body[i].x && pos_.y==_body[i].y){
 			killSnake();
 			return true;
@@ -309,49 +377,64 @@ function checkSnakePos(){
 		    if(ppx===pos_.x && ppy===pos_.y){
 
 		    	_word_eaten=_food[i].word;
-				_sentence+=_word_eaten;
-		    	console.log('eat '+_word_eaten);
+				console.log('eat '+_word_eaten);
 
 		    	let word_add=_word_eaten+randomConnection();
+		    	_sentence+=word_add;
 		    	mf=word_add.length;
 
 		    	//append tail
-		    	let end_=_body.length-1;
-		    	let tpos=_body[end_-1];
+		    	let dir_={x:_body[0].x-_body[1].x,y:_body[0].y-_body[1].y};
+		    	_body.splice(0,1);
+				_body.splice(0,1);
 
-		    	let dir_={x:_body[end_-1].x-_body[end_-2].x,y:_body[end_-1].y-_body[end_-2].y};
-		    	_body.splice(end_,1);
-				_body.splice(end_-1,1);
-
-		    	let tx=_body[_body.length-1].x+dir_.x;
-		    	let ty=_body[_body.length-1].y+dir_.y;
+		    	let tx=_body[0].x+dir_.x;
+		    	let ty=_body[0].y+dir_.y;
 		    		
 		    	for(var k=0;k<=mf+1;++k){
-		    		_body.push({x:tx,y:ty});
+		    		_body.unshift({x:tx,y:ty});
 		    		tx+=dir_.x;
 		    		tx+=dir_.y;
 		    	}
 		    	
-		    	let tail_=_container_snake.removeChildAt(end_);
-		    	let dot_=_container_snake.removeChildAt(end_-1);
+		    	let tail_=_container_snake.removeChildAt(0);
+		    	let dot_=_container_snake.removeChildAt(0);
+
+		    	let stail_=_container_shadow.removeChildAt(0);
+		    	let sdot_=_container_shadow.removeChildAt(0);
+
+
 		    	for(var k=0;k<mf;++k){
 		    		let container_=new Container();
+			    	let scontainer_=new Container();
 			    	let b_=new Sprite(_img_body[0]);
 				  	b_.scale.set(snake_scale,snake_scale);
 				  	b_._zIndex=0;
 
+					let s_=new Sprite(_shadow_body[0]);
+  					s_.scale.set(snake_scale,snake_scale);
+  					s_._zIndex=0;
+  
 				  	let text_=new PIXI.Text(word_add[k],_snake_text_style);
+				  	scontainer_.addChild(s_);
 				  	container_.addChild(b_);
 				  	container_.addChild(text_);
 
-				  	setSnakeBody(container_,_body[k+end_],calBodyDirection(k+end_));
-				  	_container_snake.addChild(container_);
+				  	// console.log(word_add[mf-1-k]+'-- '+_body[k+2].x+','+_body[k+2].y);
+				  	// setSnakeBody(container_,_body[(mf-1-k)+2],calBodyDirection((mf-1-k)+2));
+				  	// setSnakeBody(scontainer_,_body[(mf-1-k)+2],calBodyDirection((mf-1-k)+2),true);
+				  	_container_snake.addChildAt(container_,0);
+				  	_container_shadow.addChildAt(scontainer_,0);
 				}
-				_container_snake.addChild(dot_);
-  				setSnakeBody(dot_,_body[_body.length-2],calBodyDirection(_body.length-2));
+				_container_snake.addChildAt(dot_,0);
+  				_container_shadow.addChildAt(sdot_,0);
+  		// 		setSnakeBody(dot_,_body[1],calBodyDirection(1));
+				// setSnakeBody(sdot_,_body[1],calBodyDirection(1),true);
 				
-				_container_snake.addChild(tail_);
-				setSnakeTail(tail_,_body[_body.length-1],calTailDirection());
+				_container_snake.addChildAt(tail_,0);
+				_container_shadow.addChildAt(stail_,0);
+				// setSnakeTail(tail_,_body[0],calTailDirection());
+				// setSnakeTail(stail_,_body[0],calTailDirection(),true);
 				
 		    	resetFood();
 		    	return false;
@@ -363,11 +446,15 @@ function checkSnakePos(){
 }
 function killSnake(){
 	snake_stop=true;
-	_container_snake.getChildAt(0).children[0].texture=_img_head[2];
+	let len=_container_snake.children.length;
+	_container_snake.getChildAt(len-1).children[0].texture=_img_head[2];
+	_container_shadow.getChildAt(len-1).children[0].texture=_shadow_head[2];
 	app.renderer.render(_container_snake);
-	//goToResult();
 	app.ticker.remove(updateSnake);
 
+	setTimeout(function(){
+		goToResult()
+	},2000);
 }
 function goToResult(){
 
@@ -381,6 +468,7 @@ function goToResult(){
 
 function calBodyDirection(index_){
 
+	try{
 	let x1=_body[index_+1].x-_body[index_-1].x;
 	let y1=_body[index_+1].y-_body[index_-1].y;
 	
@@ -392,27 +480,34 @@ function calBodyDirection(index_){
 	switch(ang){
 		case 0:
 		case 180:
-			return 'horiz';
+			return ['horiz',ang];
 		case 90:
 		case -90:
-			return 'vert';
+			return ['vert',ang];
 		case 45:
-			if(x2>0) return 'left-bottom';
-			else return 'right-top';
+			if(x2>0) return ['left-bottom',ang];
+			else return ['right-top',ang];
 		case 135:
-			if(y2>0) return 'left-top';
-			else return 'right-bottom';
+			if(y2>0) return ['left-top',ang];
+			else return ['right-bottom',ang];
 		case -135:
-			if(x2<0) return 'right-top';
-			else return 'left-bottom';
+			if(x2<0) return ['right-top',ang];
+			else return ['left-bottom',ang];
 		case -45:
-			if(y2<0) return 'right-bottom';
-			else return 'left-top';
+			if(y2<0) return ['right-bottom',ang];
+			else return ['left-top',ang];
+		default:
+			console.log('error!!'+index_+'-'+x1+','+y1);
+			return ['horiz',ang];
+			break;
+	}
+	}catch(err){
+		console.log(err);
 	}
 }
 function calTailDirection(){
-	let i=_body.length-1;
-	return Math.atan2(_body[i-1].y-_body[i].y,_body[i-1].x-_body[i].x)*180/Math.PI;
+	// let i=0;
+	return Math.atan2(_body[1].y-_body[0].y,_body[1].x-_body[0].x)*180/Math.PI;
 }
 
 function resetFood(){

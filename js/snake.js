@@ -91,7 +91,7 @@ var _textrunner;
 
 // load
 loader.add([
-  'img/bgd.png','img/frame.png','img/logo.png','img/bar.png','img/bar-snake.png','img/title.png','img/title-text.png',
+  'img/bgd.png','img/frame.png','img/frame-shadow.png','img/logo.png','img/bar.png','img/bar-snake.png','img/title.png','img/title-text.png',
   'img/ui_sound.png','img/hambuger.png','img/ui_start.png'
   ]).load(setupbgd);
 
@@ -113,19 +113,27 @@ function setupbgd(){
   title.x=0;
   title.y=0;
   title.width=wwid;
-  app.stage.addChild(title);
   
   let title_text=new Sprite(resources['img/title-text.png'].texture);
   title_text.x=FRAME_BORDER*2;
   title_text.y=60/2-title_text.height/2;
-  app.stage.addChild(title_text);
+  
+  let sframe=new PIXI.NineSlicePlane(Texture.from('img/frame-shadow.png'),60,50,120,60);
+  sframe.x=gwid/60*5;
+  sframe.y=gwid/60*5;
+  sframe.width=wwid;
+  sframe.height=whei;
+  app.stage.addChild(sframe);
+  
 
   let img_back=new Texture.from('img/bgd.png');
   let back=new PIXI.NineSlicePlane(Texture.from('img/bgd.png'),40,0,40,200);
-  back.x=0;
+  back.x=2.5;
   back.y=60;
-  back.width=wwid; back.height=whei-60;
+  back.width=wwid-5; back.height=whei-60-2.5;
   app.stage.addChild(back);
+  
+
   
 
   
@@ -191,6 +199,27 @@ function setupbgd(){
   _textrunner.y=_btn_start.y+_btn_start.height+margin_;
   _container_start.addChild(_textrunner);
 
+
+  app.stage.addChild(_container_start);
+  
+  _container_game=new PIXI.Container();
+  _container_game.visible=false;
+  app.stage.addChild(_container_game);
+  
+    
+  _container_result=new PIXI.Container();
+  _container_result.visible=false;
+  app.stage.addChild(_container_result);
+  
+  _container_intro=new PIXI.Container();
+  _container_intro.visible=false;
+  app.stage.addChild(_container_intro);
+
+
+  app.stage.addChild(title);
+  app.stage.addChild(title_text);
+  
+
   _container_start.y=top_+offsety;
 
   _img_music=new Texture.fromImage('img/ui_sound.png');
@@ -231,23 +260,10 @@ function setupbgd(){
   });
   app.stage.addChild(hambuger);
 
-  app.stage.addChild(_container_start);
   
-  _container_game=new PIXI.Container();
-  _container_game.visible=false;
-  app.stage.addChild(_container_game);
-  
-    
-  _container_result=new PIXI.Container();
-  _container_result.visible=false;
-  app.stage.addChild(_container_result);
-  
-  _container_intro=new PIXI.Container();
-  _container_intro.visible=false;
-  app.stage.addChild(_container_intro);
   
 
-  let frame=new PIXI.NineSlicePlane(Texture.from('img/frame.png'),60,50,120,60);
+  let frame=new PIXI.NineSlicePlane(Texture.from('img/frame.png'),5,60,120,5);
   frame.x=0;
   frame.y=0;
   frame.width=wwid;
@@ -263,6 +279,10 @@ function setupbgd(){
   'img/snake/body-horizontal.png','img/snake/body-vertical.png',
   'img/snake/body-left-top.png','img/snake/body-left-bottom.png','img/snake/body-right-top.png','img/snake/body-right-bottom.png',
   'img/snake/tail.png',
+  'img/snake/shadow-normal.png','img/snake/shadow-eat.png','img/snake/shadow-dead.png',
+  'img/snake/shadow-horizontal.png','img/snake/shadow-vertical.png',
+  'img/snake/shadow-left-top.png','img/snake/shadow-left-bottom.png','img/snake/shadow-right-top.png','img/snake/shadow-right-bottom.png',
+  'img/snake/shadow-tail.png',
   'img/recommand.png',
   'img/ui_replay.png','img/ui_share.png','img/ui_signup.png',
   'img/food/2.png','img/food/3.png','img/food/4.png','img/food/5.png',
