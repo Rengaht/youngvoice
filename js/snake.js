@@ -43,8 +43,8 @@ function resetGrid(){
   wwid=app.screen.width;
   whei=app.screen.height;
 
-  MAX_GRID_X=20;
-  MAX_GRID_Y=10;
+  MAX_GRID_X=15;
+  MAX_GRID_Y=15;
 
   offsetx=FRAME_BORDER;
   offsety=_title_hei+2.5;
@@ -224,6 +224,10 @@ function setupbgd(){
   hambuger.on('pointerdown',function(){
     _container_intro.visible=!_container_intro.visible;
     _img_iknow.frame=new Rectangle(0,0,323,84);
+    if(_container_intro.visible) pauseGame();
+    else{
+      if(_container_game.visible) startGame();
+    }
   });
   app.stage.addChild(hambuger);
 
@@ -233,13 +237,14 @@ function setupbgd(){
   _container_game.visible=false;
   app.stage.addChild(_container_game);
   
-  _container_intro=new PIXI.Container();
-  _container_intro.visible=false;
-  app.stage.addChild(_container_intro);
     
   _container_result=new PIXI.Container();
   _container_result.visible=false;
   app.stage.addChild(_container_result);
+  
+  _container_intro=new PIXI.Container();
+  _container_intro.visible=false;
+  app.stage.addChild(_container_intro);
   
 
   let frame=new PIXI.NineSlicePlane(Texture.from('img/frame.png'),60,50,120,60);
@@ -254,9 +259,14 @@ function setupbgd(){
   'img/ui_iknow.png',
   'img/game.png','img/team.png','img/website.png','img/info.png','img/info_back.png',
   'img/hint-mobile.png','img/hint-pc.png',
-  'img/head-normal.png','img/head-eat.png','img/head-dead.png',
+  'img/snake/head-normal.png','img/snake/head-eat.png','img/snake/head-dead.png',
+  'img/snake/body-horizontal.png','img/snake/body-vertical.png',
+  'img/snake/body-left-top.png','img/snake/body-left-bottom.png','img/snake/body-right-top.png','img/snake/body-right-bottom.png',
+  'img/snake/tail.png',
   'img/recommand.png',
   'img/ui_replay.png','img/ui_share.png','img/ui_signup.png',
+  'img/food/2.png','img/food/3.png','img/food/4.png','img/food/5.png',
+  'data/keyword.json','data/sentence.json'
   ]).on('progress',loadProgressHandler).load(setup);
 
 }
@@ -265,8 +275,10 @@ function setup(){
   _bar.visible=false;
   _bar_snake.visible=false;
   _btn_start.visible=true;
-
+  _snake_stop=true;
   
+  loadData();
+
   setupGame();
   setupInfo();
  
@@ -386,10 +398,12 @@ function setupInfo(){
 function setupGame(){
 
   //'E3D0E4FF','E3D0E451'
+  _container_game.x=offsetx;
+  _container_game.y=offsety;
 
   let graphics_=new PIXI.Graphics();
-  graphics_.x=offsetx;
-  graphics_.y=offsety;
+  // graphics_.x=offsetx;
+  // graphics_.y=offsety;
   
   graphics_.beginFill(0xFFFFFF);
   graphics_.drawRect(0,0,gwid*mgridx,gwid*mgridy);
@@ -410,6 +424,8 @@ function setupGame(){
   graphics_.endFill();
 
   _container_game.addChild(graphics_);
+
+  initSnake();
 
 }
 function setupResult(){
@@ -488,15 +504,30 @@ function onClickStart(){
   _img_start.frame=new Rectangle(0,84,323,84);
   _container_game.visible=true;
   _container_start.visible=false;
+  resetGame();
+  startGame();
 }
 
 function onClickIknow(){
   _img_iknow.frame=new Rectangle(0,84,323,84);
   _container_intro.visible=false;
+
+  if(_container_intro.visible) pauseGame();
+  else{
+      if(_container_game.visible) startGame();
+  }
 }
 function onClickReplay(){
   _img_replay.frame=new Rectangle(0,84,127,84);
+  resetGame();
+  startGame();
+
+  _container_game.visible=true;
+  _container_result.visible=false;
+  
+
 }
 function onClickShare(){
   _img_share.frame=new Rectangle(0,84,268,84);
 }
+
