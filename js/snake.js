@@ -32,8 +32,10 @@ function resize() {
 
   
 }
+let MAX_GRID_X=15;
+let MAX_GRID_Y=15;
 
-var MAX_GRID_X,MAX_GRID_Y,offsetx,offsety,gwid;
+var offsetx,offsety,gwid;
 var mgridx,mgridy;
 var button_scale;
 
@@ -43,8 +45,7 @@ function resetGrid(){
   wwid=app.screen.width;
   whei=app.screen.height;
 
-  MAX_GRID_X=15;
-  MAX_GRID_Y=15;
+  
 
   offsetx=FRAME_BORDER;
   offsety=_title_hei+2.5;
@@ -285,8 +286,9 @@ function setupbgd(){
   'img/snake/shadow-tail.png',
   'img/recommand.png',
   'img/ui_replay.png','img/ui_share.png','img/ui_signup.png',
-  'img/food/2.png','img/food/3.png','img/food/4.png','img/food/5.png',
-  'data/keyword.json','data/sentence.json'
+  'img/food/2-1.png','img/food/2-2.png','img/food/3-1.png','img/food/3-2.png','img/food/3-3.png','img/food/3-4.png',
+  'img/food/4.png','img/food/5-1.png','img/food/5-2.png','img/food/5-3.png','img/food/5-4.png',
+  'data/keyword.json','data/sentence.json','data/food_pattern.json'
   ]).on('progress',loadProgressHandler).load(setup);
 
 }
