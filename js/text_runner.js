@@ -1,4 +1,5 @@
-var RunnerText=['字裡行間穿梭堆疊 上下左右  長長短短','吃吃的青春冒險 通往你內心的異世界'];
+let FONT_STRETCH=.7;
+var RunnerText=['字裡行間穿梭堆疊','上下左右  長長短短','吃吃的青春冒險','通往你內心的異世界'];
 var _runner_sentence_index=0;
 var _runner_word_index=0;
 
@@ -8,7 +9,7 @@ function drawTextRunner(delta){
 	
 
 	var run_text_style = new PIXI.TextStyle({
-    	fontFamily: 'jackeyfont',
+    	fontFamily: 'SnakeFont',
     	fontSize: 36,
     	fill:0x122C9A,
     	letterSpacing:2,
@@ -26,7 +27,7 @@ function drawTextRunner(delta){
 			let x_=0;
 			for(var j in RunnerText[i]){
 				let key_=new PIXI.Text(RunnerText[i][j],run_text_style);
-				key_.scale.set(.6,1);
+				key_.scale.set(FONT_STRETCH,1);
 				key_.x=x_;
 				key_.y=0;
 
