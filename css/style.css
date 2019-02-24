@@ -18,6 +18,15 @@ body{
 	height: 100%;
 	/*position: relative;*/
 }
+@media all and (max-width: 600px) and (orientation:landscape) 
+{
+	#pixi_frame{
+		overflow: hidden;
+		width: 100%;
+		height: 100%;
+	}	
+}
+
 #pixi_frame{
 	overflow: hidden;
 	width: 95%;

@@ -418,7 +418,7 @@ function setupResult(){
       breakWords: true
   });
   _sample_content=new PIXI.Text('testtest', sample_text_style);
-  _sample_content.x=_recommand_back.x+(_recommand_back.width-20)/2-_sample_content.width/2
+  _sample_content.x=_recommand_back.x+text_margin*2;
   _sample_content.y = _recommand_back.y+65+text_margin;
 
   _sample_title_text=new PIXI.Text('testtest', sample_text_style);
@@ -441,14 +441,16 @@ function setSampleText(data_){
 
   if(data_.type==='empty'){
 
-    _sample_title_text.text='oops! 資料庫建置中!';
-    _sample_title_text.x=_recommand_back.x+372+text_margin*2;
-    _sample_title_text.y = _recommand_back.y+60/2-_sample_title_text.height/2;
+    _sample_title_text.text='';
+        
+    _sample_content.text='oops! 資料庫建置中!';
+    _sample_content.x=_recommand_back.x+text_margin*2;
+    _sample_content.y = _recommand_back.y+65+text_margin;
     return;
   }
 
   _sample_content.text=data_.text;
-  _sample_content.x=_recommand_back.x+(_recommand_back.width-20)/2-_sample_content.width/2
+  _sample_content.x=_recommand_back.x+text_margin*2;
   _sample_content.y = _recommand_back.y+65+text_margin;
 
   _sample_title_text.text=data_.title;

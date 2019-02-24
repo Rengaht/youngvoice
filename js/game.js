@@ -1,8 +1,13 @@
 let SNAKE_VEL=15;
+let TRANSITION_TIME=1500;
+let GG_TRANSITION_TIME=3000;
+let SNAKE_FONT_SIZE=55;
+let SHADOW_OFFSET=5;
+
 var snake_scale;
 var _vel='right';
 var _last_vel='right';
-var _shadow_offset;
+
 
 var _body=[];
 var snake_stop=true;
@@ -84,38 +89,35 @@ function initSnake(){
 	
 	_container_food=new Container();
 	_container_game.addChild(_container_food);
-	
+
 	_container_shadow=new Container();
 	_container_game.addChild(_container_shadow);
-	
+
 	_container_snake=new Container();
 	_container_game.addChild(_container_snake);
 		
-  _img_head.push(new Texture.from('img/snake/head-normal.png'));
-  _img_head.push(new Texture.from('img/snake/head-eat.png'));
-  _img_head.push(new Texture.from('img/snake/head-dead.png'));
+	_img_head.push(new Texture.from('img/snake/head-normal.png'));
+	_img_head.push(new Texture.from('img/snake/head-eat.png'));
+	_img_head.push(new Texture.from('img/snake/head-dead.png'));
 
-  _shadow_head.push(new Texture.from('img/snake/shadow-normal.png'));
-  _shadow_head.push(new Texture.from('img/snake/shadow-eat.png'));
-  _shadow_head.push(new Texture.from('img/snake/shadow-dead.png'));
+	_shadow_head.push(new Texture.from('img/snake/shadow-normal.png'));
+	_shadow_head.push(new Texture.from('img/snake/shadow-eat.png'));
+	_shadow_head.push(new Texture.from('img/snake/shadow-dead.png'));
 	  
 
-  _img_body.push(new Texture.from('img/snake/body-horizontal.png'));
-  _img_body.push(new Texture.from('img/snake/body-vertical.png'));
-  _img_body.push(new Texture.from('img/snake/body-left-top.png'));
-  _img_body.push(new Texture.from('img/snake/body-left-bottom.png'));
-  _img_body.push(new Texture.from('img/snake/body-right-top.png'));
-  _img_body.push(new Texture.from('img/snake/body-right-bottom.png'));
-  
-  _shadow_body.push(new Texture.from('img/snake/shadow-horizontal.png'));
-  _shadow_body.push(new Texture.from('img/snake/shadow-vertical.png'));
-  _shadow_body.push(new Texture.from('img/snake/shadow-left-top.png'));
-  _shadow_body.push(new Texture.from('img/snake/shadow-left-bottom.png'));
-  _shadow_body.push(new Texture.from('img/snake/shadow-right-top.png'));
-  _shadow_body.push(new Texture.from('img/snake/shadow-right-bottom.png'));
-  
+	_img_body.push(new Texture.from('img/snake/body-horizontal.png'));
+	_img_body.push(new Texture.from('img/snake/body-vertical.png'));
+	_img_body.push(new Texture.from('img/snake/body-left-top.png'));
+	_img_body.push(new Texture.from('img/snake/body-left-bottom.png'));
+	_img_body.push(new Texture.from('img/snake/body-right-top.png'));
+	_img_body.push(new Texture.from('img/snake/body-right-bottom.png'));
 
-  // resetSnake();
+	_shadow_body.push(new Texture.from('img/snake/shadow-horizontal.png'));
+	_shadow_body.push(new Texture.from('img/snake/shadow-vertical.png'));
+	_shadow_body.push(new Texture.from('img/snake/shadow-left-top.png'));
+	_shadow_body.push(new Texture.from('img/snake/shadow-left-bottom.png'));
+	_shadow_body.push(new Texture.from('img/snake/shadow-right-top.png'));
+	_shadow_body.push(new Texture.from('img/snake/shadow-right-bottom.png'));
 
 
 	document.addEventListener('keydown', function(event) {
@@ -131,17 +133,21 @@ function initSnake(){
 	});
 
 	let canvas_=document.getElementById('pixi_frame');
-	let swipe_=new Hammer(canvas_);
-	swipe_.on("swipeleft swiperight swipeup swipedown",function(ev){
-		if(event.type==='swipeleft' && _last_vel!=='right'){
-            _vel='left';
-        }else if(event.type==='swipeup' && _last_vel!=='down'){
-            _vel='up';
-        }else if(event.type==='swiperight' && _last_vel!=='left'){
-            _vel='right';
-        }else if(event.type==='swipedown' && _last_vel!=='up'){
-            _vel='down';
-        }
+	let hammer=new Hammer.Manager(canvas_);
+	let swipe_=new Hammer.Swipe();
+	hammer.add(swipe_);
+
+	hammer.on("swipeleft",function(ev){
+		if(_last_vel!=='right') _vel='left';        
+	});
+	hammer.on("swiperight",function(ev){
+		if(_last_vel!=='left') _vel='right';        
+	});
+	hammer.on("swipeup",function(ev){
+		if(_last_vel!=='down') _vel='up';        
+	});
+	hammer.on("swipedown",function(ev){
+		if(_last_vel!=='up') _vel='down';        
 	});
 	
 
@@ -155,11 +161,11 @@ function initSnake(){
 	
 
 	_snake_text_style = new PIXI.TextStyle({
-    	// fontFamily: 'jackeyfont',
-    	fontSize: gwid/60*32,
+    	fontFamily: 'SnakeFont',
+    	fontSize: gwid/60*SNAKE_FONT_SIZE,
     	fill:0x122C9A,
-    	letterSpacing:2,
-    	fontWeight:'bold'
+    	// letterSpacing:2,
+    	// fontWeight:'bold'
 	});
 
 	
@@ -213,7 +219,7 @@ function resetSnake(sentence_){
   let head=new Sprite(_img_head[0]);
 
   snake_scale=gwid/(head.width/115*60);
-  _shadow_offset=5;//gwid/60*5;
+  //gwid/60*5;
   
   head.pivot.set(head.width,head.height/2);
   head.scale.set(snake_scale,snake_scale);
@@ -250,7 +256,9 @@ function resetSnake(sentence_){
   	
   	let tt=(i<sentence_.length)?sentence_[i]:'...';
   	let text_=new PIXI.Text(tt,_snake_text_style);
+  	text_.scale.set(FONT_STRETCH,1);
   	text_._zIndex=10;
+
 
   	scontainer_.addChild(s_);
   	container_.addChild(b_);
@@ -291,7 +299,10 @@ function resetSnake(sentence_){
 
 }
 function resetGame(){
-	
+
+	shuffle(list_keyword);
+	_index_keyword=0;
+
 	resetSnake(randomSentence());
 	resetFood();
 	app.ticker.add(updateSnake);
@@ -312,8 +323,8 @@ function setSnakeHead(container_,pt,angle,isshadow=false){
 	  let sprite_=container_.children[0];
 	  sprite_.angle=angle;
 	  
-	  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation)+(isshadow?_shadow_offset:0);
-	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?_shadow_offset:0);
+	  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation)+(isshadow?SHADOW_OFFSET:0);
+	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?SHADOW_OFFSET:0);
   // }
 }
 function setSnakeBody(container_,pt,direction,isshadow=false){
@@ -343,13 +354,13 @@ function setSnakeBody(container_,pt,direction,isshadow=false){
 			break;
 	}
 
-	sprite_.x=gwid*pt.x+(isshadow?_shadow_offset:0);
-	sprite_.y=gwid*pt.y+(isshadow?_shadow_offset:0);
+	sprite_.x=gwid*pt.x+(isshadow?SHADOW_OFFSET:0);
+	sprite_.y=gwid*pt.y+(isshadow?SHADOW_OFFSET:0);
 
 	if(container_.children.length>1){
 		let text_=container_.children[1];
-	  	text_.x=sprite_.x+sprite_.width/2-text_.width/2;
-	  	text_.y=sprite_.y+sprite_.height/2-text_.height/2;
+	  	text_.x=sprite_.x+SHADOW_OFFSET*2+(sprite_.width-SHADOW_OFFSET*2)/2-text_.width/2;
+	  	text_.y=sprite_.y+SHADOW_OFFSET*2+(sprite_.height-SHADOW_OFFSET*2)/2-text_.height/2;
 	  	// text_.angle=direction[1];
   	}
   }catch(err){
@@ -362,8 +373,8 @@ function setSnakeTail(container_,pt,angle,isshadow=false){
 	  	
 	  sprite_.angle=angle;
 	  
-	  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation)+(isshadow?_shadow_offset:0);
-	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?_shadow_offset:0);
+	  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation)+(isshadow?SHADOW_OFFSET:0);
+	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?SHADOW_OFFSET:0);
   // }
 
 }
@@ -399,6 +410,7 @@ function checkSnakePos(){
 
 		    	_word_eaten=_food[i].word;
 				console.log('eat '+_word_eaten);
+				_keyword.push(_word_eaten);
 
 		    	let word_add=_word_eaten+randomConnection();
 		    	_sentence+=word_add;
@@ -437,6 +449,8 @@ function checkSnakePos(){
   					s_._zIndex=0;
   
 				  	let text_=new PIXI.Text(word_add[k],_snake_text_style);
+				  	text_.scale.set(FONT_STRETCH,1);
+
 				  	scontainer_.addChild(s_);
 				  	container_.addChild(b_);
 				  	container_.addChild(text_);
@@ -449,7 +463,11 @@ function checkSnakePos(){
 				_container_snake.addChildAt(tail_,0);
 				_container_shadow.addChildAt(stail_,0);
 				
-		    	resetFood();
+				clearFood();
+
+		    	setTimeout(function(){
+		    		if(!snake_stop) resetFood();
+		    	},TRANSITION_TIME);
 		    	return false;
 		    }
 		}
@@ -465,18 +483,21 @@ function killSnake(){
 	app.renderer.render(_container_snake);
 	app.ticker.remove(updateSnake);
 
-	// setTimeout(function(){
-	// 	goToResult()
-	// },5000);
+	setTimeout(function(){
+		goToResult()
+	},GG_TRANSITION_TIME);
 }
 function goToResult(){
 
-	// _container_snake.scale.set(.5,.5);
-	// _container_result.addChild(_container_snake);
-	_img_replay.frame=new Rectangle(0,0,127,84);
+	renderImage(function(){
+		resetResult();
+		getSample('hihi');
+
   
-	_container_game.visible=false;
-	_container_result.visible=true;
+		_container_game.visible=false;
+		_container_result.visible=true;
+	});	
+	
 }
 
 function calBodyDirection(index_){
@@ -529,10 +550,20 @@ function getFoodOf(count_){
 	return result[Math.floor(Math.random()*result.length)];
 }
 
+function clearFood(){
+	_food=[];
+	_food_pattern=[];
+	_word_eaten='';
+	_container_food.visible=false;
 
+	app.renderer.render(_container_food);
+
+}
 function resetFood(){
 	
 	//_container_food.removeChildren();
+	
+	_keyword=[];
 	_food=[];
 	_food_pattern=[];
 	_word_eaten='';
@@ -560,6 +591,7 @@ function resetFood(){
 	  	let mf=key_.length;
 		for(var k=0;k<mf;++k){
 	  		let t_=new PIXI.Text(key_[k],_snake_text_style);
+	  		t_.scale.set(FONT_STRETCH,1);
 	  		t_.x=ff.x+fp.pattern[k].x*gwid+gwid/2-t_.width/2;
 	  		t_.y=ff.y+fp.pattern[k].y*gwid+gwid/2-t_.height/2;
 	  		text_.addChild(t_);
@@ -569,6 +601,7 @@ function resetFood(){
 		_food.push(f);
 		_food_pattern.push(fp);
 	}
+	_container_food.visible=true;
 }
 function generateFood(food_data){
 

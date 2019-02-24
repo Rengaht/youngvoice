@@ -1,8 +1,11 @@
 
 var list_sentence,list_keyword,list_connection;
+var _index_keyword=0;
+
 var _sentence='';
 var _keyword=[];
 var _output_blob=null;
+
 function loadData(){
 	list_sentence=loader.resources['data/sentence.json'].data.start;
 	list_connection=loader.resources['data/sentence.json'].data.connect;
@@ -14,10 +17,38 @@ function randomSentence(){
 	_sentence=list_sentence[Math.floor(Math.random()*list_sentence.length)];
 	return _sentence;
 }
+
+var shuffle = function (array) {
+
+	var currentIndex = array.length;
+	var temporaryValue, randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+
+};
+
 function randomKeyword(){
-	let key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
+	// let key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
+	// while(key_.length<2){
+	// 	key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
+	// }
+	let key_=list_keyword[_index_keyword];
+	_index_keyword++;
 	while(key_.length<2){
-		key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
+		key_=list_keyword[_index_keyword];
+		_index_keyword++;
 	}
 	return key_;
 }
