@@ -11,7 +11,19 @@ var _img_start,_img_iknow,_img_share,_img_replay,_img_signup;
 var _container_game;
 var _sample_content,_sample_title_text,_recommand_back;
 var _graphics_grid=null;
-var _textrunner;
+
+let MIN_GRID=10;
+let MAX_GRID=18;
+
+var offsetx,offsety,gwid;
+
+var button_scale;
+let text_margin=FRAME_BORDER*2;
+
+var marginx,marginy;
+var landscape;
+var _title_hei;
+
 
 
 function setupPixi(){
@@ -33,7 +45,7 @@ function setupPixi(){
     autoResize:true,
     resolution: devicePixelRatio,
     antialias:true,
-    transparent:false
+    transparent:true
   });
 
   // app.renderer.backgroundColor = 0x061639;
@@ -68,39 +80,36 @@ function resize() {
 
   offsetx=FRAME_BORDER;
   offsety=FRAME_BORDER/2;
-  gwid=Math.min((whei-offsety)/MIN_GRID,(wwid-offsetx)/MIN_GRID);
-
-  mgridx=Math.floor((wwid-FRAME_BORDER*2)/gwid);
-  mgridy=Math.floor((whei-offsety-FRAME_BORDER)/gwid);
-
-  console.log(mgridx+' x '+mgridy);
+  // gwid=Math.min((whei-offsety)/MIN_GRID,(wwid-offsetx)/MIN_GRID);
 
 
-  cwid=gwid*mgridx+FRAME_BORDER*2;
-  chei=gwid*mgridy+offsety+FRAME_BORDER;
+  gwid=Math.max(wwid,whei)/MAX_GRID;
 
-  marginx=wwid/2-cwid/2;
-  maringy=whei/2-chei/2;
+
+  mgridx=Math.floor((wwid)/gwid);
+  mgridy=Math.floor((whei)/gwid);
+
+  if(Math.min(mgridx,mgridy)<MIN_GRID){
+
+    gwid=Math.min(wwid,whei)/MIN_GRID;
+
+    mgridx=Math.floor((wwid)/gwid);
+    mgridy=Math.floor((whei)/gwid);
+
+  }
+
+
+  console.log(mgridx+' '+(wwid-gwid*mgridx)+' x '+mgridy+' '+(whei-gwid*mgridy));
+
+
 
   button_scale=Math.min(wwid/906,1);
   
   _title_hei=60;
+
   
   resetGrid();
 }
-
-let MIN_GRID=8;
-let MAX_GRID=15;
-
-var offsetx,offsety,gwid;
-var mgridx,mgridy;
-var button_scale;
-let text_margin=FRAME_BORDER*2;
-
-var marginx,marginy;
-var landscape;
-var cwid,chei; // canvas size
-var _title_hei;
 
 
 

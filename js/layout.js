@@ -48,11 +48,11 @@ function setup(){
   _container_game=new PIXI.Container();
   _container_game.visible=true;
 
-  let mask_=new PIXI.Sprite(Texture.WHITE);
-  mask_.width=wwid-FRAME_BORDER;
-  mask_.height=whei-_title_hei-FRAME_BORDER;
-  _container_game.addChild(mask_);
-  _container_game.mask=mask_;
+  // let mask_=new PIXI.Sprite(Texture.WHITE);
+  // mask_.width=wwid-FRAME_BORDER;
+  // mask_.height=whei-FRAME_BORDER;
+  // _container_game.addChild(mask_);
+  // _container_game.mask=mask_;
   app.stage.addChild(_container_game);
 
 
@@ -78,13 +78,18 @@ function setupGrid(){
 }
 function resetGrid(){
   if(_graphics_grid===null) return;
-  
-  _graphics_grid.width=cwid;
-  _graphics_grid.height=chei;
+  app.stage.width=wwid;
+  app.stage.height=whei;
+
+  _container_game.width=wwid;
+  _container_game.height=whei;
+
+  _graphics_grid.width=wwid;
+  _graphics_grid.height=whei;
 
   _graphics_grid.clear();
-  _graphics_grid.beginFill(0xFFFFFF);
-  _graphics_grid.drawRect(0,0,gwid*mgridx,gwid*mgridy);
+  _graphics_grid.beginFill(0xFCEB74);
+  _graphics_grid.drawRect(0,0,app.stage.width,app.stage.height);
   _graphics_grid.endFill();
 
   for(var i=0;i<mgridx;++i){
@@ -96,10 +101,11 @@ function resetGrid(){
     }
   }
 
-  // _graphics_grid.beginFill(0xFCEB74);
-  //   _graphics_grid.drawRect(0,gwid*mgridy-10,10,10);
-  //   _graphics_grid.drawRect(gwid*mgridx-10,gwid*mgridy-10,10,10);
-  // _graphics_grid.endFill();
+
+  _graphics_grid.beginFill(0xFCEB74);
+    _graphics_grid.drawRect(gwid*mgridx,0,wwid-gwid*mgridx,whei);
+    _graphics_grid.drawRect(0,gwid*mgridy,wwid,whei-gwid*mgridy);
+  _graphics_grid.endFill();
 
   // _container_game.addChild(graphics_);
   app.renderer.render(_graphics_grid);
@@ -109,11 +115,12 @@ function resetGrid(){
 function setSampleText(data_){
 
   if(data_.type==='empty'){
-
-     document.getElementById('sample_text').innerHTML='oops! 資料庫建置中!';
-  
-  }else{
+     document.getElementById('sample_text').innerHTML='oops! 資料庫建置中!';  
+  }else{      
     document.getElementById('sample_text').innerHTML=data_.title+'<br>'+data_.text;
+    if(data_.type!='text'){
+        document.getElementById('sample_image').src=data_.imgurl;
+    }
   }
   // TODO:img!!!
 

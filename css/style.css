@@ -42,6 +42,7 @@ body{
 	background-color:rgb(96,51,255);
 	min-height:60px;
 	height:10%;
+	overflow:hidden;
 }
 
 .innerFrame{
@@ -55,7 +56,7 @@ body{
 }
 .outerFrame{
 	position:absolute;
-	top:5px;
+	top:0px;
 	left:5px;
 	bottom:5px;
 	right:5px;
@@ -67,7 +68,10 @@ body{
 	bottom:0px;
 	left:0px;
 	right:0px;
-	padding:50px;
+	padding-left:10%;
+	padding-right:10%;
+	padding-bottom:50px;
+	padding-top:50px;
 }
 
 #title_logo{
@@ -77,22 +81,41 @@ body{
 	left:10px;
 	height:80%;
 }
-.frameButton{
+#frame_button_wrapper{
+	width:20%;
 	float:right;
-	/*width:100%;*/
-	min-width:60px;
 	height:100%;
+}
+.frameButton{
+
+	/*width:100%;*/
+	/*min-width:60px;
+	height:100%;*/
+/*	width: 50%;
+	height: 0;
+	padding-bottom: 50%;*/
+	/*width:auto;*/
+	height:100%;
+	float:right;
+
 	background-color:#FCEB74;
 	background-size:100% 200%;
 	background-repeat:none;
+/*
+	border:5px solid;
+	border-color:#122C9A;*/
+}
+.noLeftBorder{
+	border-left-style:none;
 }
 #music_button{
-	background-image:url(../img/ui_sound.png);
-
+	/*background-image:url(../img/ui_sound.png);*/
+	height:100%;
 }
 #hambuger_button{
-	background-size:100% 100%;
-	background-image:url(../img/hambuger.png);
+	/*background-size:100% 100%;*/
+	/*background-image:url(../img/hambuger.png);*/
+	height:100%;
 }
 
 

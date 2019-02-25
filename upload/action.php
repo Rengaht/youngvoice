@@ -74,7 +74,7 @@
 				        $json['title']=$row['year'].'/'.$row['title'].'/'.$row['author'];
 						$json['type']=$row['type'];
 						$json['text']=$row['text'];
-						$json['imgurl']=$row['file'];
+						$json['imgurl']='http://'.$_SERVER['HTTP_HOST'].'/youngvoice/sample/'.$row['year'].'/'.$row['file'];
 
 						echo utf8_encode(json_encode($json));
 				    }

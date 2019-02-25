@@ -5,10 +5,12 @@
 #start_frame{
 	/*display:none;*/
 	background-image:url("../img/bgd.png");
+	background-size:cover;
 	background-repeat:repeat-x;
 }
 #result_frame{
 	background-image:url("../img/bgd.png");
+	background-size:cover;
 	background-repeat:repeat-x;
 	overflow-y:scroll;
 	overflow-x:hidden;
@@ -26,15 +28,15 @@
 }
 
 #game_intro{
-	min-width:500px;
-	width:40%;
+	/*min-width:600px;*/
+	width:50%;
 	/*margin-right:10%;*/
 	display:inline-block;
 }
 .introDialogue{
 	position:relative;
-	left:10%;
-	width:80%;
+	/*left:10%;*/
+	width:100%;
 	background-image:url("../img/info.png");
 	background-size:100% 100%;	
 
@@ -50,12 +52,12 @@
 	font-family:'IntroFont';
 }
 #website_link{
-	width:20%;
-	margin-right:10%;
+	width:calc(50% - 10px);
+	/*margin-left:20%;*/
 	display:inline-block;
+	vertical-align:bottom;
 	/*float:right;*/
 }
-
 .uiButton{
 	
 	min-width:20%;
@@ -101,5 +103,15 @@
 }
 #sample_dialogue{
 	min-height:100px;
+	padding-bottom:50px;
+	padding-left:20px;
+	padding-right:50px;
+}
+#sample_image{
+	width:100%;
+	margin-bottom:50px;
+}
 
+#sample_text{
+	
 }

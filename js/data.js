@@ -101,7 +101,7 @@ function shareImage(url_){
 	//alert('share image: '+url_);
 
   let surl_='https://www.facebook.com/dialog/feed?'
-  +'app_id=301141697218610'
+  +'app_id=262109598012691'
   +'&display=popup'
   +'&link='+url_
   +'&redirect_uri=https://mmab.com.tw';

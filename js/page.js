@@ -10,7 +10,7 @@ window.onload=function(){
   _frame_game=document.getElementById('pixi_frame');
 
   setupPixi();
-
+  setupRunner();
 }
 
 
@@ -32,10 +32,10 @@ function onClickIknow(){
   // else{
   //     if(_container_game.visible) startGame();
   // }
-  if(_playing_game) pauseGame();
+  if(!snake_stop) pauseGame();
   else startGame();
 
-  _frame_intro.style.display='block';
+  _frame_intro.style.display='none';
 
 }
 function onClickReplay(){
@@ -60,7 +60,7 @@ function resetResult(){
 }
 
 function toggleIntro(){
-  if(_frame_intro.style.display==='none'){
+  if(_frame_intro.style.display!='block'){
       _frame_intro.style.display='block';
   }else{
       _frame_intro.style.display='none';

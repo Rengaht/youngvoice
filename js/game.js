@@ -1,7 +1,7 @@
 let SNAKE_VEL=15;
 let TRANSITION_TIME=1500;
 let GG_TRANSITION_TIME=3000;
-let SNAKE_FONT_SIZE=55;
+let SNAKE_FONT_SIZE=50;
 let SHADOW_OFFSET=5;
 
 var snake_scale;
@@ -13,7 +13,7 @@ var _body=[];
 var snake_stop=true;
 var _angle={'left':0,'right':180,'up':90,'down':270};
 var _last_ms;
-var _snake_text_style;
+var _snake_text_style,_eaten_text_style;
 
 var _img_body=[],_shadow_body=[];
 // var _img_food=[];
@@ -186,6 +186,13 @@ function setupSnake(){
     	fontFamily: 'SnakeFont',
     	fontSize: gwid/60*SNAKE_FONT_SIZE,
     	fill:0x122C9A,
+    	// letterSpacing:2,
+    	// fontWeight:'bold'
+	});
+	_eaten_text_style = new PIXI.TextStyle({
+    	fontFamily: 'SnakeFont',
+    	fontSize: gwid/60*SNAKE_FONT_SIZE,
+    	fill:0xFFFFFF,
     	// letterSpacing:2,
     	// fontWeight:'bold'
 	});
@@ -418,6 +425,7 @@ function checkSnakePos(){
 		    	let word_add=_word_eaten+randomConnection();
 		    	_sentence+=word_add;
 		    	mf=word_add.length;
+		    	let klen=_word_eaten.length;
 
 		    	//append tail
 		    	let dir_={x:_body[0].x-_body[1].x,y:_body[0].y-_body[1].y};
@@ -451,7 +459,7 @@ function checkSnakePos(){
   					s_.scale.set(snake_scale,snake_scale);
   					s_._zIndex=0;
   
-				  	let text_=new PIXI.Text(word_add[k],_snake_text_style);
+				  	let text_=new PIXI.Text(word_add[k],(k<klen)?_eaten_text_style:_snake_text_style);
 				  	text_.scale.set(FONT_STRETCH,1);
 
 				  	scontainer_.addChild(s_);

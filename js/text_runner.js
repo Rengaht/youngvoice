@@ -3,6 +3,37 @@ var RunnerText=['字裡行間穿梭堆疊','上下左右  長長短短','吃吃�
 var _runner_sentence_index=0;
 var _runner_word_index=0;
 
+var app_runner;
+var _textrunner;
+function setupRunner(){
+	let twid=50*.7*9;
+  app_runner=new PIXI.Application({
+  	width:twid,
+  	height:100,
+    autoResize:true,
+    resolution: devicePixelRatio,
+    antialias:true,
+    transparent:true
+  });
+
+  document.getElementById('loading_text').appendChild(app_runner.view);
+  app_runner.renderer.view.style.position='relative';
+  app_runner.renderer.view.style.top='auto';
+  app_runner.renderer.view.style.bottom='20%';
+
+  _textrunner=new PIXI.Container();
+  _textrunner.height=50;
+  _textrunner.y=50;
+  drawTextRunner(0);
+  _textrunner.x=twid/2-_textrunner.width/2;
+
+  app_runner.stage.addChild(_textrunner);
+  app_runner.ticker.add(function(delta){
+    drawTextRunner(delta);
+  });
+
+}
+
 function drawTextRunner(delta){
 	_runner_word_index+=app.ticker.deltaMS/150;
 	// console.log(_runner_word_index);
@@ -53,7 +84,7 @@ function drawTextRunner(delta){
 
 
 	if(_runner_word_index>=total_){
-		_runner_sentence_index=(_runner_sentence_index+1)%2;
+		_runner_sentence_index=(_runner_sentence_index+1)%(RunnerText.length);
 		_runner_word_index=0;
 		total_=RunnerText[_runner_sentence_index].length;
 
