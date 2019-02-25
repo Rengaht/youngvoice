@@ -57,6 +57,37 @@ function randomConnection(){
 }
 
 function renderImage(onFinish){
+
+	var minx=wwid,miny=whei;
+	let s_=_container_snake.children;
+	for(var k in s_){
+		let tx=s_[k].getChildAt(0).x;
+		let ty=s_[k].getChildAt(0).y;
+		if(tx<minx) minx=tx;
+		if(ty<miny) miny=ty;
+	}
+	// minx-gwid;
+	// miny-=gwid;
+	for(var k in s_){
+		s_[k].x-=minx;
+		s_[k].y-=miny;
+	}
+	let ss_=_container_shadow.children;
+	for(var k in ss_){
+		ss_[k].x-=minx;
+		ss_[k].y-=miny;
+	}
+
+// let tmp_=new Sprite(resources['img/logo.png'].texture);
+// tmp_.y=100;
+// _container_tmp.addChild(tmp_);
+app.renderer.render(_container_tmp);
+	let url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
+	document.getElementById('dead_snake').src=url_;
+
+	// _container_tmp.removeChild(tmp_);
+
+	// document.getElementById('result_top').appendChild(url_);
 	app.renderer.extract.canvas(_container_game).toBlob(function(b){
 		// var a = document.createElement('a');
 		// document.body.append(a);

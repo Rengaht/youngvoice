@@ -5,6 +5,7 @@ function loadGame(){
   // ]).load(setupbgd);
 
   loader.add([
+  'img/logo.png',
   'img/ui_iknow.png',
   'img/game.png','img/team.png','img/website.png','img/info.png','img/info_back.png',
   'img/hint-mobile.png','img/hint-pc.png',
@@ -78,6 +79,8 @@ function setupGrid(){
 }
 function resetGrid(){
   if(_graphics_grid===null) return;
+
+
   app.stage.width=wwid;
   app.stage.height=whei;
 
@@ -88,12 +91,12 @@ function resetGrid(){
   _graphics_grid.height=whei;
 
   _graphics_grid.clear();
-  _graphics_grid.beginFill(0xFCEB74);
-  _graphics_grid.drawRect(0,0,app.stage.width,app.stage.height);
+  _graphics_grid.beginFill(0xFFFFFF);
+  _graphics_grid.drawRect(0,0,wwid,whei);
   _graphics_grid.endFill();
 
-  for(var i=0;i<mgridx;++i){
-    for(var j=0;j<mgridy;++j){
+  for(var i=0;i<=mgridx;++i){
+    for(var j=0;j<=mgridy;++j){
       if((i+j)%2==0) _graphics_grid.beginFill(0xE3D0E4,1);
       else _graphics_grid.beginFill(0xE3D0E4,.5);
       _graphics_grid.drawRect(i*gwid,j*gwid,gwid,gwid);
@@ -102,10 +105,10 @@ function resetGrid(){
   }
 
 
-  _graphics_grid.beginFill(0xFCEB74);
-    _graphics_grid.drawRect(gwid*mgridx,0,wwid-gwid*mgridx,whei);
-    _graphics_grid.drawRect(0,gwid*mgridy,wwid,whei-gwid*mgridy);
-  _graphics_grid.endFill();
+  // _graphics_grid.beginFill(0x241c83);
+  //   _graphics_grid.drawRect(gwid*mgridx,0,wwid-gwid*mgridx,whei);
+  //   _graphics_grid.drawRect(0,gwid*mgridy,wwid,whei-gwid*mgridy);
+  // _graphics_grid.endFill();
 
   // _container_game.addChild(graphics_);
   app.renderer.render(_graphics_grid);

@@ -48,7 +48,7 @@ function setupPixi(){
     transparent:true
   });
 
-  // app.renderer.backgroundColor = 0x061639;
+  app.renderer.backgroundColor = 0x000000;
   // app.ticker.start();
 
   document.getElementById('pixi_frame').appendChild(app.view);

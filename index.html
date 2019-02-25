@@ -9,17 +9,17 @@
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="css/frame.css">
 
-<!--   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.3/mobile-detect.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.3/mobile-detect.min.js"></script>
   <script>
-    // WebFont.load({
-    //   custom:{
-    //     families:['SnakeFont','IntroFont']
-    //   }
-    // });
+    WebFont.load({
+      custom:{
+        families:['SnakeFont','IntroFont']
+      }
+    });
 
-    // var mobile_detect=new MobileDetect(window.navigator.userAgent);
-    // let _mobile=(mobile_detect.mobile()!=null);
+    var mobile_detect=new MobileDetect(window.navigator.userAgent);
+    let _mobile=(mobile_detect.mobile()!=null);
     // alert(_mobile);
 
 
@@ -70,7 +70,7 @@
         </div>
 
         <div id="result_frame" class="overlapFrame">
-          <div class="Center objMargin">
+          <div class="Center objMargin" id="result_top">
             <img src="img/logo.png" id="end_logo"/>
             <img src="img/sample.png" id="dead_snake"/>
           </div>
@@ -111,6 +111,8 @@
     </div>
 
   </div>
+
+  <!-- <audio id="sound_back" src="sound/back.wav" preload="auto"></audio> -->
   <!-- <script src="js/test.js"></script> -->
    <script src="js/snake.js"></script>
  

@@ -2,6 +2,9 @@
 
 var _frame_intro,_frame_game,_frame_result,_frame_start;
 
+let _sound_back,_sound_eat,_sound_dead;
+var _play_sound=true;
+
 window.onload=function(){
 
   _frame_intro=document.getElementById('intro_frame');
@@ -11,6 +14,7 @@ window.onload=function(){
 
   setupPixi();
   setupRunner();
+  loadMusic();
 }
 
 
@@ -21,7 +25,7 @@ function onClickStart(){
   _frame_game.style.display="block";
 
   resetGame();
-  startGame();
+  // startGame();
 }
 
 function onClickIknow(){
@@ -40,8 +44,8 @@ function onClickIknow(){
 }
 function onClickReplay(){
     _frame_result.style.display="none";
-    _frame_start.style.display="block";
-  
+    _frame_game.style.display="block";
+    resetGame();
 }
 function onClickShare(){
   
@@ -62,10 +66,39 @@ function resetResult(){
 function toggleIntro(){
   if(_frame_intro.style.display!='block'){
       _frame_intro.style.display='block';
+      pauseGame();
   }else{
       _frame_intro.style.display='none';
+      if(_frame_game.style.display!='none') startGame();
   }
 }
+function loadMusic(){
+  // _sound_back=document.getElementById('sound_back');
+  // _sound_back.addEventListener('ended', function() {
+  //   this.currentTime = 0;
+  //   this.play();
+  // }, false);
+  // var promise=_sound_back.play();
+  // if (playPromise !== undefined) {
+  //   playPromise.then(_ => {
+  //     // Automatic playback started!
+  //     // Show playing UI.
+  //   })
+  //   .catch(error => {
+  //     // Auto-play was prevented
+  //     // Show paused UI.
+  // });
+
+  // _sound_dead=new Audio('sound/dead.wav');
+  // _sound_eat=new Audio('sound/eat.wav');
+}
+
 function  toggleMusic(){
-  
+    _play_sound=!_play_sound;
+    if(!_play_sound){
+      _sound_back.stop();
+    }else{
+      _sound_back.play();
+    }
+
 }

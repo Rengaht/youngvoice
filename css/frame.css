@@ -50,6 +50,7 @@
 	padding:0px 20px 50px 20px;
 	font-size:2em;
 	font-family:'IntroFont';
+	color:#122C9A;
 }
 #website_link{
 	width:calc(50% - 10px);
@@ -89,12 +90,14 @@
 #replay_button{
 	width:127px;
 	background-image:url("../img/ui_replay.png");
-	background-size:100% 200%;		
+	background-size:100% 200%;	
+	margin-right: 20px;	
 }
 #share_button{
 	width:268px;
 	background-image:url("../img/ui_share.png");
 	background-size:100% 200%;		
+	margin-right: 20px;
 }
 #signup_button{
 	width:268px;
@@ -114,4 +117,8 @@
 
 #sample_text{
 	
+}
+
+#dead_snake{
+	max-width: 100%;
 }
