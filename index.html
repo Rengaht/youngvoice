@@ -7,31 +7,99 @@
 
   <title>吃吃真心話</title>
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/frame.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
+<!--   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.3/mobile-detect.min.js"></script> -->
   <script>
-    WebFont.load({
-      custom:{
-        families:['SnakeFont','IntroFont']
-      }
-    });
+    // WebFont.load({
+    //   custom:{
+    //     families:['SnakeFont','IntroFont']
+    //   }
+    // });
+
+    // var mobile_detect=new MobileDetect(window.navigator.userAgent);
+    // let _mobile=(mobile_detect.mobile()!=null);
+    // alert(_mobile);
   </script>
   
-  <script src="pixi/jquery-3.3.1.min.js"></script>
+  <script src="pixi/jquery-3.3.1.min.js"> </script>
   <script src="pixi/hammer.min.js"></script>
-  <script src="js/loadlayout.js"></script>
+  
+  <script src="js/page.js"></script>
+
+  <script src="js/layout.js"></script>
   <script src="js/text_runner.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/game.js"></script>
-  
+  <script src="js/game.js"></script> 
+
+   
 </head>
   <script src="pixi/pixi.min.js"></script>
   
 <body>
-  <div id="outer">
-  	<div id="pixi_frame"></div>
-  </div>
-  <script src="js/snake.js"></script>
+  <div id="outer" class="outerWrapper">
+  
+   
+    <!-- <img src="img/frame-shadow.png" class="img_frame shadow"/> -->
+    <div id="back_frame"></div>
+    
+    <div class="outerFrame">
+      <div class="frameTitle">
+        <img src="img/title-text.png" id="title_logo"/>          
+        <div class="frameButton" id="hambuger_button" onClick="toggleIntro()"></div>
+        <div class="frameButton" id="music_button" onClick="toggleMusic()"></div>
+      </div>
 
+      <div class="innerFrame">
+        <div id="pixi_frame" class="overlapFrame"></div>
+        
+        <div id="start_frame" class="overlapFrame">
+          <img src="img/logo.png" id="start_logo" class="Center objMargin"/>
+          <div class="Center uiButton objMargin" id="start_button" onClick="onClickStart()"></div>
+          <div class="Center" id="loadingText"></div>
+        </div>
+
+        <div id="result_frame" class="overlapFrame">
+          <div class="Center objMargin">
+            <img src="img/logo.png" id="end_logo"/>
+            <img src="img/sample.png" id="dead_snake"/>
+          </div>
+          <div class="introDialogue objMargin" id="sample_dialogue">
+            <img class="introTitle" src="img/recommand.png"/>     
+            <p class="introText" id="sample_text"></p>     
+          </div>
+          <div class="Center objMargin">
+            <div class="resultButton" id="replay_button" onClick="onClickReplay()"></div>
+            <div class="resultButton" id="share_button" onClick="onClickShare()"></div>
+            <a href="http://www.youngvoice.tw/content/award/award_index.aspx?id=10" target="_blank">
+              <div class="resultButton" id="signup_button""></div>
+            </a>
+          </div>
+        </div>
+        
+        <div id="intro_frame" class="overlapFrame">
+            <div class="introDialogue" id="game_intro">
+              <img class="introTitle" src="img/game.png"/>     
+              <p class="introText">這是一個喜歡吃內心話的貪食蛇。特別喜歡青春的心。</p>         
+            </div>
+            <div id="website_link">
+              <a href="http://www.youngvoice.tw" target="_blank">
+                <img src="img/website.png"/></a>
+            </div>
+            <div class="introDialogue">
+              <img class="introTitle" src="img/team.png"/>     
+              <p class="introText">「青少年發聲網」希望支持與陪伴青少年朋友以自己熟悉的媒介，透過創作的過程找到自己的聲音、說自己說的話。歡迎更多有興趣的青少年朋友一起加入我們視覺影像的世界。</p>         
+            </div>
+            <div class="Center uiButton" id="iknow_button" onClick="onClickIknow()"></div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- <script src="js/test.js"></script> -->
+   <script src="js/snake.js"></script>
+ 
 </body>
 </html>

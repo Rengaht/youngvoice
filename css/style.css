@@ -1,6 +1,6 @@
  @font-face {
 	font-family: 'SnakeFont';
-	src:url("../font/jackeyfont.ttf");
+	src:url("../font/PingFang Bold.ttf");
 }
 @font-face {
 	font-family: 'IntroFont';
@@ -13,30 +13,95 @@
 body{
 	background-color: #FCEB74;
 }
-#outer{
-	width: 100%;
-	height: 100%;
-	/*position: relative;*/
-}
-@media all and (max-width: 600px) and (orientation:landscape) 
-{
-	#pixi_frame{
-		overflow: hidden;
-		width: 100%;
-		height: 100%;
-	}	
+.Center{
+	display:block;
+	text-align: center;
+	margin: auto;
 }
 
-#pixi_frame{
+/*wrappers*/
+.outerWrapper{
+	/*background-color:black;*/
+	position:relative;
 	overflow: hidden;
-	width: 95%;
-	height: 95%;
-	max-width:900px;
-	max-height:900px;
-	margin: auto;  
+	left:.5vw;
+	top:.5vh;
+	width: 99vw;
+	height: 99vh;	
+}
+#back_frame{
 	position: absolute;
+	width:100%;
+	height:100%;
+	z-index: -2;
+	background-image: url("../img/frame.png");
+	background-size:cover;
+}
+.frameTitle{
+	position:relative;		
+	background-color:rgb(96,51,255);
+	min-height:60px;
+	height:10%;
+}
+
+.innerFrame{
+	position:relative;
+	/*width:calc(100vw - 5px);*/
+	/*overflow:scroll;*/
+	min-height:90%;
+	/*left:5px;*/
+	bottom:0px;
+
+}
+.outerFrame{
+	position:absolute;
+	top:5px;
+	left:5px;
+	bottom:5px;
+	right:5px;
+}
+.overlapFrame{
+	/*background-color:white;*/
+	position:absolute;
+	top:0px;
+	bottom:0px;
+	left:0px;
+	right:0px;
+	padding:50px;
+}
+
+#title_logo{
+	position:absolute;
+	width:auto;
+	top:10%;
+	left:10px;
+	height:80%;
+}
+.frameButton{
+	float:right;
+	/*width:100%;*/
+	min-width:60px;
+	height:100%;
+	background-color:#FCEB74;
+	background-size:100% 200%;
+	background-repeat:none;
+}
+#music_button{
+	background-image:url(../img/ui_sound.png);
+
+}
+#hambuger_button{
+	background-size:100% 100%;
+	background-image:url(../img/hambuger.png);
+}
+
+
+canvas{
+	position:absolute;
+	top:0;
 	left:0;
-	right: 0;
-	top: 0;
-	bottom: 0;
+}
+
+.objMargin{
+	margin-top:40px;
 }

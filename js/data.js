@@ -101,7 +101,7 @@ function shareImage(url_){
 	//alert('share image: '+url_);
 
   let surl_='https://www.facebook.com/dialog/feed?'
-  // +'app_id=145634995501895'
+  +'app_id=301141697218610'
   +'&display=popup'
   +'&link='+url_
   +'&redirect_uri=https://mmab.com.tw';
@@ -110,7 +110,7 @@ function shareImage(url_){
 
 }
 
-function getSample(keyword_){
+function getSample(){
 	var formData = new FormData();
 	formData.append('action', 'sample');
 

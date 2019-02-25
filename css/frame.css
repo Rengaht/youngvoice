@@ -1,0 +1,105 @@
+#pixi_frame{
+	display:none;
+}
+
+#start_frame{
+	/*display:none;*/
+	background-image:url("../img/bgd.png");
+	background-repeat:repeat-x;
+}
+#result_frame{
+	background-image:url("../img/bgd.png");
+	background-repeat:repeat-x;
+	overflow-y:scroll;
+	overflow-x:hidden;
+	display:none;
+}
+
+/* intro */
+#intro_frame{
+	background-image:url("../img/info_back.png");
+	background-size:100% 100%;
+	overflow-y:scroll;
+	overflow-x:hidden;
+
+	display:none;
+}
+
+#game_intro{
+	min-width:500px;
+	width:40%;
+	/*margin-right:10%;*/
+	display:inline-block;
+}
+.introDialogue{
+	position:relative;
+	left:10%;
+	width:80%;
+	background-image:url("../img/info.png");
+	background-size:100% 100%;	
+
+}
+.introTitle{
+	position:relative;
+	top:-20px;
+	left:-20px;
+}
+.introText{
+	padding:0px 20px 50px 20px;
+	font-size:2em;
+	font-family:'IntroFont';
+}
+#website_link{
+	width:20%;
+	margin-right:10%;
+	display:inline-block;
+	/*float:right;*/
+}
+
+.uiButton{
+	
+	min-width:20%;
+	width:328px;
+	height:84px;
+	cursor:pointer;
+}
+#iknow_button{
+	background-image:url("../img/ui_iknow.png");
+	background-size:100% 200%;		
+}
+
+/* start */
+#start_button{
+	background-image:url("../img/ui_start.png");
+	background-size:100% 200%;		
+}
+#start_logo{
+	
+}
+
+/* result */
+
+.resultButton{
+	height:84px;
+	display:inline-block;
+	cursor:pointer;
+}
+#replay_button{
+	width:127px;
+	background-image:url("../img/ui_replay.png");
+	background-size:100% 200%;		
+}
+#share_button{
+	width:268px;
+	background-image:url("../img/ui_share.png");
+	background-size:100% 200%;		
+}
+#signup_button{
+	width:268px;
+	background-image:url("../img/ui_signup.png");
+	background-size:100% 200%;		
+}
+#sample_dialogue{
+	min-height:100px;
+
+}

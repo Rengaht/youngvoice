@@ -29,6 +29,28 @@ var _food_data=[];
 //var _eat_food=false;
 var _word_eaten='';
 
+
+function resetGame(){
+
+	shuffle(list_keyword);
+	_index_keyword=0;
+
+	resetSnake(randomSentence());
+	resetFood();
+	app.ticker.add(updateSnake);
+}
+function startGame(){
+
+
+	_last_ms=0;
+	snake_stop=false;
+	
+}
+function pauseGame(){
+	snake_stop=true;
+}
+
+
 function updateSnake(delta){
 
 	if(snake_stop) return;
@@ -79,12 +101,12 @@ function updateSnake(delta){
 			setSnakeTail(_container_shadow.children[i],_body[i],calTailDirection(),true);		
 		} 
 	}	
-
+ 
 
 	// if(_eat_food) resetFood();	
 }
 
-function initSnake(){
+function setupSnake(){
 
 	
 	_container_food=new Container();
@@ -298,26 +320,7 @@ function resetSnake(sentence_){
  _body.reverse();
 
 }
-function resetGame(){
 
-	shuffle(list_keyword);
-	_index_keyword=0;
-
-	resetSnake(randomSentence());
-	resetFood();
-	app.ticker.add(updateSnake);
-
-}
-
-function startGame(){
-
-	_last_ms=0;
-	snake_stop=false;
-	
-}
-function pauseGame(){
-	snake_stop=true;
-}
 function setSnakeHead(container_,pt,angle,isshadow=false){
   // for(var i in container_.children){
 	  let sprite_=container_.children[0];
@@ -491,11 +494,10 @@ function goToResult(){
 
 	renderImage(function(){
 		resetResult();
-		getSample('hihi');
+		getSample();
 
-  
-		_container_game.visible=false;
-		_container_result.visible=true;
+  		_frame_game.style.display='none';
+		_frame_result.style.display='block';
 	});	
 	
 }
