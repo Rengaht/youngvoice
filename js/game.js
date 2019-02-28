@@ -1,18 +1,29 @@
-let SNAKE_VEL=15;
+let SNAKE_VEL_MIN=32;
+let SNAKE_VEL_MID=24;
+let SNAKE_VEL_MAX=8;
+let SNAKE_ACCELERATE=2;
+
+let TAIL_APPEND_TIME=500;
+
 let TRANSITION_TIME=1500;
 let GG_TRANSITION_TIME=3000;
 let SNAKE_FONT_SIZE=40;
 let SHADOW_OFFSET=5;
+let START_TIMEOUT=500;
+
+let NEAR_FOOD_THRESHOLD=3;
+
 
 var snake_scale;
 var _vel='right';
 var _last_vel='right';
+var _snake_vel;
 
 
 var _body=[];
 var snake_stop=true;
 var _angle={'left':0,'right':180,'up':90,'down':270};
-var _last_ms;
+var _last_ms,_last_append;
 var _snake_text_style,_eaten_text_style;
 
 var _img_body=[],_shadow_body=[];
@@ -21,36 +32,55 @@ var _img_head=[],_shadow_head=[];
 
 var _food=[];
 var _container_tmp;
-var _container_food,_container_snake,_container_shadow,_container_hint;
+var _container_food,_container_snake,_container_shadow;
 var _food_scale;
 
 var _food_pattern=[];
 var _food_data=[];
 
 //var _eat_food=false;
-var _word_eaten='';
+var _word_eaten=[];
 
-
+var _pre_body_pos={};
+var _pre_shadow_pos={};
 
 function resetGame(){
 
 	shuffle(list_keyword);
 	_index_keyword=0;
-	_container_hint.visible=true;
+
+	// _container_hint.visible=true;
+	_frame_hint.style.display="block";
 
 	resetSnake(randomSentence());
 	resetFood();
-	app.ticker.add(updateSnake);
+
+	_snake_vel=SNAKE_VEL_MIN;
+
+	_keyword=[];
+	_word_eaten=[];
+
+	resetSampleText();
+	document.getElementById('dead_snake').src='';
 }
 function startGame(){
 
-	_container_hint.visible=false;
+	// _container_hint.visible=false;
+	_frame_hint.style.display="none";
 	_last_ms=0;
+	_last_append=0;
+
+
+	app.ticker.add(updateSnake);
+
 	snake_stop=false;
+	if(_food.length<1) resetFood();
 	
 }
 function pauseGame(){
 	snake_stop=true;
+
+	app.ticker.remove(updateSnake);
 }
 
 
@@ -59,8 +89,26 @@ function updateSnake(delta){
 	if(snake_stop) return;
 	
 	_last_ms+=delta;
-	if(_last_ms>=SNAKE_VEL) _last_ms=0;
+	_last_append+=delta;
+
+	// if(_last_append>=_snake_vel/2){
+
+	// 	_last_append=0;
+	// }
+
+
+	if(_last_ms>=_snake_vel) _last_ms=0;
 	else return;
+
+
+	
+	
+	if(_word_eaten.length>0){
+		let tword=_word_eaten.shift();
+		appendTail(tword);
+	}
+	
+
 
 	var pos={x:0,y:0};
 	let len=_body.length;
@@ -105,7 +153,7 @@ function updateSnake(delta){
 		} 
 	}	
  
-
+	app.renderer.render(app.stage);
 	// if(_eat_food) resetFood();	
 }
 
@@ -150,6 +198,18 @@ function setupSnake(){
 
 
 	document.addEventListener('keydown', function(event) {
+		
+		if(event.keyCode===13){
+			// TODO: trigger button
+			return;
+		}
+
+
+		if(_frame_hint.style.display==="block"){
+			startGame();
+			return;			
+		}
+
 		if(event.which===37 && _last_vel!=='right'){
             _vel='left';
         }else if(event.which===38 && _last_vel!=='down'){
@@ -163,7 +223,10 @@ function setupSnake(){
 
 	let canvas_=document.getElementById('pixi_frame');
 	let hammer=new Hammer.Manager(canvas_);
-	let swipe_=new Hammer.Swipe();
+	let swipe_=new Hammer.Swipe({
+		threshold:8,
+		velocity:.2
+	});
 	hammer.add(swipe_);
 
 	hammer.on("swipeleft",function(ev){
@@ -186,7 +249,7 @@ function setupSnake(){
 		//_img_food.push(new Texture.from('img/'+_food_data[i].img));
 		_food_data[i]['texture']=new Texture.from('img/'+_food_data[i].img);
 	}
-	_food_scale=gwid*(68/60)/(74);
+	_food_scale=gwid/60;
 	
 
 	_snake_text_style = new PIXI.TextStyle({
@@ -219,31 +282,7 @@ function setupSnake(){
   		_container_food.addChild(text_);
 	}
 
-	_container_hint=new Container();
-	let back=new PIXI.NineSlicePlane(Texture.from('img/info_back.png'),60,50,120,60);
-	back.width=wwid;
-	back.height=whei;
-  	_container_hint.addChild(back);
-
-  	let hint=new Sprite(resources[(_mobile?'img/hint-mobile.png':'img/hint-pc.png')].texture);
-  	hint.x=wwid/2-hint.width/2;
-  	hint.y=whei/2-hint.height/2;
-  	_container_hint.addChild(hint);
-
-  	_container_hint.interactive=true;
-  	_container_hint.on('pointerdown',function(){
-  		startGame();
-  	});
-
-  	_container_game.addChild(_container_hint);
-
-  	// resetFood();
-
-	// _container_game.interactive=true;
-	// _container_game.on("pointerdown",function(){
-	// 	resetFood();
-	// });
-
+	_container_game.visible=false;
 }
 function resetBodyPos(len){
 
@@ -352,8 +391,8 @@ function resetSnake(sentence_){
   
   stail_container.addChild(stail);
   tail_container.addChild(tail);
-  setSnakeTail(tail_container,_body[len-1],0);
-  setSnakeTail(stail_container,_body[len-1],0,true);
+  setSnakeTail(tail_container,_body[len-1],landscape?180:-90);
+  setSnakeTail(stail_container,_body[len-1],landscape?180:-90,true);
   
   _container_snake.addChild(tail_container);
   _container_shadow.addChild(stail_container);
@@ -442,6 +481,7 @@ function checkSnakePos(){
 		}
 	}
 	/* check food*/
+	let near_=false;
 	for(var i in _food){
 		
 		let mf=_food[i].word.length;
@@ -454,61 +494,28 @@ function checkSnakePos(){
 		    
 		    if(ppx===pos_.x && ppy===pos_.y){
 
-		    	_word_eaten=_food[i].word;
-				console.log('eat '+_word_eaten);
-				_keyword.push(_word_eaten);
 
-		    	let word_add=_word_eaten+randomConnection();
+		    	if(_play_sound) playEatSound();
+
+
+		    	let w=_food[i].word;
+				console.log('eat '+w);
+				_keyword.push(w);
+
+				_snake_vel-=SNAKE_ACCELERATE*(_keyword.length);
+				if(_snake_vel<SNAKE_VEL_MAX) _snake_vel=SNAKE_VEL_MAX;
+
+		    	let word_add=w+randomConnection();
 		    	_sentence+=word_add;
 		    	mf=word_add.length;
-		    	let klen=_word_eaten.length;
+		    	let klen=w.length;
 
 		    	//append tail
-		    	let dir_={x:_body[0].x-_body[1].x,y:_body[0].y-_body[1].y};
-		    	_body.splice(0,1);
-				_body.splice(0,1);
-
-		    	let tx=_body[0].x+dir_.x;
-		    	let ty=_body[0].y+dir_.y;
-		    		
-		    	for(var k=0;k<=mf+1;++k){
-		    		_body.unshift({x:tx,y:ty});
-		    		tx+=dir_.x;
-		    		tx+=dir_.y;
-		    	}
-		    	
-		    	let tail_=_container_snake.removeChildAt(0);
-		    	let dot_=_container_snake.removeChildAt(0);
-
-		    	let stail_=_container_shadow.removeChildAt(0);
-		    	let sdot_=_container_shadow.removeChildAt(0);
-
-
 		    	for(var k=0;k<mf;++k){
-		    		let container_=new Container();
-			    	let scontainer_=new Container();
-			    	let b_=new Sprite(_img_body[0]);
-				  	b_.scale.set(snake_scale,snake_scale);
-				  	b_._zIndex=0;
-
-					let s_=new Sprite(_shadow_body[0]);
-  					s_.scale.set(snake_scale,snake_scale);
-  					s_._zIndex=0;
-  
-				  	let text_=new PIXI.Text(word_add[k],(k<klen)?_eaten_text_style:_snake_text_style);
-				  	text_.scale.set(FONT_STRETCH,1);
-
-				  	scontainer_.addChild(s_);
-				  	container_.addChild(b_);
-				  	container_.addChild(text_);
-				  	_container_snake.addChildAt(container_,0);
-				  	_container_shadow.addChildAt(scontainer_,0);
-				}
-				_container_snake.addChildAt(dot_,0);
-  				_container_shadow.addChildAt(sdot_,0);
-				
-				_container_snake.addChildAt(tail_,0);
-				_container_shadow.addChildAt(stail_,0);
+		    		let wr={text:word_add[k],key:k<klen};
+		    		if(k==0) appendTail(wr);
+		    		else _word_eaten.push(wr);
+		    	}
 				
 				clearFood();
 
@@ -516,12 +523,77 @@ function checkSnakePos(){
 		    		if(!snake_stop) resetFood();
 		    	},TRANSITION_TIME);
 		    	return false;
+		    }else{
+		    	let dist_=Math.sqrt(Math.pow(ppx-pos_.x,2)+Math.pow(ppy-pos_.y,2));
+		    	if(dist_<NEAR_FOOD_THRESHOLD)
+		    		near_=true;
 		    }
 		}
 	}
 
+	if(near_){
+		_container_snake.children[_body.length-1].children[0].texture=_img_head[1];
+		_container_shadow.children[_body.length-1].children[0].texture=_shadow_head[1];
+	}else{
+		_container_snake.children[_body.length-1].children[0].texture=_img_head[0];
+		_container_shadow.children[_body.length-1].children[0].texture=_shadow_head[0];
+	}
+}
+function appendTail(text_){
+
+	console.log('append: '+text_);
+
+	let dir_={x:_body[0].x-_body[1].x,y:_body[0].y-_body[1].y};
+	_body.splice(0,1);
+	_body.splice(0,1);
+
+	let tx=_body[0].x+dir_.x;
+	let ty=_body[0].y+dir_.y;
+	
+	//let mf=text_.text.length;
+	for(var k=0;k<3;++k){
+		_body.unshift({x:tx,y:ty});
+		tx+=dir_.x;
+		tx+=dir_.y;
+	}
+	
+	let tail_=_container_snake.removeChildAt(0);
+	let dot_=_container_snake.removeChildAt(0);
+
+	let stail_=_container_shadow.removeChildAt(0);
+	let sdot_=_container_shadow.removeChildAt(0);
+
+
+	// for(var k=0;k<mf;++k){
+	let container_=new Container();
+	let scontainer_=new Container();
+	let b_=new Sprite(_img_body[0]);
+  	b_.scale.set(snake_scale,snake_scale);
+  	b_._zIndex=0;
+
+	let s_=new Sprite(_shadow_body[0]);
+		s_.scale.set(snake_scale,snake_scale);
+		s_._zIndex=0;
+
+  	let ttext_=new PIXI.Text(text_.text,(text_.key)?_eaten_text_style:_snake_text_style);
+  	ttext_.scale.set(FONT_STRETCH,1);
+
+  	scontainer_.addChild(s_);
+  	container_.addChild(b_);
+  	container_.addChild(ttext_);
+  	_container_snake.addChildAt(container_,0);
+  	_container_shadow.addChildAt(scontainer_,0);
+	
+	_container_snake.addChildAt(dot_,0);
+	_container_shadow.addChildAt(sdot_,0);
+	
+	_container_snake.addChildAt(tail_,0);
+	_container_shadow.addChildAt(stail_,0);
 
 }
+
+
+
 function killSnake(){
 	snake_stop=true;
 	let len=_container_snake.children.length;
@@ -530,19 +602,52 @@ function killSnake(){
 	app.renderer.render(_container_snake);
 	app.ticker.remove(updateSnake);
 
+	if(_play_sound) playDeadSound();
+
+	_pre_shadow_pos.x=_container_shadow.x;
+	_pre_shadow_pos.y=_container_shadow.y;
+	_pre_body_pos.x=_container_snake.x;
+	_pre_body_pos.y=_container_snake.y;
+	
+	app.ticker.add(shakeBody);
 	setTimeout(function(){
-		goToResult()
+		app.ticker.remove(shakeBody);
+		_container_snake.x=_pre_shadow_pos.x;
+		_container_snake.y=_pre_shadow_pos.y;
+		_container_shadow.x=_pre_shadow_pos.x;
+		_container_shadow.y=_pre_shadow_pos.y;
+	},800);
+
+	setTimeout(function(){
+		goToResult();
 	},GG_TRANSITION_TIME);
 }
+function shakeBody(){
+
+	let off_=10;
+
+	_container_snake.x=_pre_shadow_pos.x+Math.random()*off_-off_/2;
+	_container_snake.y=_pre_shadow_pos.y+Math.random()*off_-off_/2;
+	_container_shadow.x=_pre_shadow_pos.x+Math.random()*off_-off_/2;
+	_container_shadow.y=_pre_shadow_pos.y+Math.random()*off_-off_/2;
+}
+
 function goToResult(){
 
-	renderImage(function(){
-		resetResult();
-		getSample();
+	getSample();
 
-  		_frame_game.style.display='none';
-		_frame_result.style.display='block';
-	});	
+	 $('#signup_button').removeClass('pressed');
+	 $('#share_button').removeClass('pressed');
+	 $('#replay_button').removeClass('pressed');
+
+	$('#result_frame').css('display','block');
+	$('#result_frame').removeClass('hidden');
+	setTimeout(function(){
+		renderImage(function(){		
+			_container_game.visible=false;		
+		});	
+	},300);
+
 	
 }
 
@@ -599,7 +704,7 @@ function getFoodOf(count_){
 function clearFood(){
 	_food=[];
 	_food_pattern=[];
-	_word_eaten='';
+	// _word_eaten=[];
 	_container_food.visible=false;
 
 	app.renderer.render(_container_food);
@@ -609,10 +714,10 @@ function resetFood(){
 	
 	//_container_food.removeChildren();
 	
-	_keyword=[];
+	
 	_food=[];
 	_food_pattern=[];
-	_word_eaten='';
+	// _word_eaten=[];
 
 	for(var i=0;i<3;++i){
 

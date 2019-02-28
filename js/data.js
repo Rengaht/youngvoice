@@ -1,6 +1,7 @@
 
 var list_sentence,list_keyword,list_connection;
 var _index_keyword=0;
+var _index_connection=0;
 
 var _sentence='';
 var _keyword=[];
@@ -9,12 +10,14 @@ var _output_blob=null;
 function loadData(){
 	list_sentence=loader.resources['data/sentence.json'].data.start;
 	list_connection=loader.resources['data/sentence.json'].data.connect;
-	list_keyword=loader.resources['data/keyword.json'].data.keyword;
+	list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
 
 }
 
 function randomSentence(){
+	
 	_sentence=list_sentence[Math.floor(Math.random()*list_sentence.length)];
+	
 	return _sentence;
 }
 
@@ -50,92 +53,138 @@ function randomKeyword(){
 		key_=list_keyword[_index_keyword];
 		_index_keyword++;
 	}
+
+	if(_index_keyword>=list_keyword.length){
+		_index_keyword=0;
+		list_keyword=shuffle(list_keyword);
+	}
+
 	return key_;
 }
 function randomConnection(){
-	return list_connection[Math.floor(Math.random()*list_connection.length)];
+
+	let cnn=list_connection[_index_connection];
+
+	_index_connection++;
+	if(_index_connection>=list_connection.length){
+		_index_connection=0;
+	}
+
+	return cnn;
 }
 
 function renderImage(onFinish){
 
-	var minx=wwid,miny=whei;
-	let s_=_container_snake.children;
-	for(var k in s_){
-		let tx=s_[k].getChildAt(0).x;
-		let ty=s_[k].getChildAt(0).y;
+	// var minx=wwid,miny=whei;
+	// let s_=_container_snake.children;
+	// for(var k in s_){
+	// 	let tx=s_[k].getChildAt(0).x;
+	// 	let ty=s_[k].getChildAt(0).y;
+	// 	if(tx<minx) minx=tx;
+	// 	if(ty<miny) miny=ty;
+	// }
+	var minx=mgridx,miny=mgridy;	
+	//
+	for(var k in _body){
+		let tx=_body[k].x;
+		let ty=_body[k].y;
 		if(tx<minx) minx=tx;
 		if(ty<miny) miny=ty;
 	}
-	// minx-gwid;
-	// miny-=gwid;
-	for(var k in s_){
-		s_[k].x-=minx;
-		s_[k].y-=miny;
-	}
-	let ss_=_container_shadow.children;
-	for(var k in ss_){
-		ss_[k].x-=minx;
-		ss_[k].y-=miny;
-	}
+	minx*=gwid;
+	miny*=gwid;
 
-// let tmp_=new Sprite(resources['img/logo.png'].texture);
-// tmp_.y=100;
-// _container_tmp.addChild(tmp_);
-app.renderer.render(_container_tmp);
+	_container_snake.x-=minx;
+	_container_snake.y-=miny;
+	_container_shadow.x-=minx;
+	_container_shadow.y-=miny;
+
+	// let s_=_container_snake.children;
+	// for(var k in s_){
+	// 	s_[k].x-=minx;
+	// 	s_[k].y-=miny;
+	// }
+	// let ss_=_container_shadow.children;
+	// for(var k in ss_){
+	// 	ss_[k].x-=minx;
+	// 	ss_[k].y-=miny;
+	// }
+
+
+	app.renderer.render(_container_tmp);
 	let url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
 	document.getElementById('dead_snake').src=url_;
 
-	// _container_tmp.removeChild(tmp_);
-
-	// document.getElementById('result_top').appendChild(url_);
-	app.renderer.extract.canvas(_container_game).toBlob(function(b){
-		// var a = document.createElement('a');
-		// document.body.append(a);
-		// a.download = 'tmp.png';
-		// a.href = URL.createObjectURL(b);
-		// a.click();
-		// a.remove();
-
-		_output_blob=b;
-		onFinish();
-
-
-	}, 'image/png');
-}
-function uploadImage(blob_){
 	
-	var formData = new FormData();
-	formData.append('action', 'upload');
+	_container_snake.x+=minx;
+	_container_snake.y+=miny;
+	_container_shadow.x+=minx;
+	_container_shadow.y+=miny;
+	
 
-	var file=new File([blob_],'temp.png');
-	formData.append('file', blob_);
+	// draw tmp grid
+	// _graphics_grid.addChild(_container_tmp);
 
-	formData.append('keyword','test');
-	$.ajax({
-        type: 'POST',
-        url: 'upload/action.php',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            console.log(data);
-            shareImage(data.url);
-        },
-        error: function(response) {
-            console.log(response.responseText);
-        }
-    });
+
+	// app.renderer.extract.canvas(_container_tmp).toBlob(function(b){
+	// 	output_blob=b;		
+
+	// 	// _graphics_grid.removeChild(_container_tmp);
+
+	// }, 'image/png');
+}
+function uploadImage(){
+
+	_container_tmp.visible=true;
+
+	app.stage.removeChild(_container_game);	
+	_graphics_grid.addChild(_container_game);
+
+	
+	app.renderer.extract.canvas(_graphics_grid).toBlob(function(b){
+		// output_blob=b;		
+
+		// _container_tmp.visible=false;
+		app.stage.addChild(_container_game);
+		
+		_graphics_grid.removeChild(_container_game);
+
+		var formData = new FormData();
+		formData.append('action', 'upload');
+
+		var file=new File([b],'temp.png');
+		formData.append('file', b);
+
+		// formData.append('keyword','test');
+		$.ajax({
+	        type: 'POST',
+	        url: 'upload/action.php',
+	        data: formData,
+	        processData: false,
+	        contentType: false,
+	        success: function(data) {
+	            console.log(data);
+	            shareImage(data.url);
+	            $('#share_button').removeClass('pressed');
+	        },
+	        error: function(response) {
+	            console.log(response.responseText);
+	        }
+	    });
+	}, 'image/png');
+
+	
 
 }
 function shareImage(url_){
 
 	//alert('share image: '+url_);
 
-  let surl_='https://www.facebook.com/dialog/feed?'
+  let surl_='https://www.facebook.com/dialog/share?'
   +'app_id=262109598012691'
-  +'&display=popup'
-  +'&link='+url_
-  +'&redirect_uri=https://mmab.com.tw';
+  +'&hashtag='+encodeURIComponent('#青少年不簡單')
+  +'&href='+encodeURIComponent(url_)
+  +'&redirect_uri='+encodeURIComponent('https://mmlab.com.tw/project/youngvoice/upload/redirect.html');
 
   window.open(surl_,'_blank');
 
@@ -150,13 +199,14 @@ function getSample(){
 		key_=_keyword[Math.floor(Math.random()*_keyword.length)];
 	else 
 		key_=randomKeyword();
-	// console.log('get keyword: '+key_);
+
+	console.log('get keyword: '+key_);
 
 	formData.append('keyword',key_);
 
 	$.ajax({
         type: 'POST',
-        url: 'upload/action.php',
+        url: 'https://mmlab.com.tw/project/youngvoice/upload/action.php',
         data: formData,
         processData: false,
         contentType: false,
@@ -170,4 +220,5 @@ function getSample(){
     });
 
 }
+
 

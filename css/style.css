@@ -12,6 +12,7 @@
 }
 body{
 	background-color: #FCEB74;
+	overflow: hidden;
 }
 .Center{
 	display:block;
@@ -28,37 +29,87 @@ body{
 	top:.5vh;
 	width: 99vw;
 	height: 99vh;	
+
+	
 }
 #back_frame{
-	position: absolute;
-	width:100%;
-	height:100%;
-	z-index: -2;
-	background-image: url("../img/frame.png");
-	background-size:cover;
+	position:absolute;
+	top:0px;
+	left:0px;
+	bottom:0px;
+	right:0px;
+	
+	/*background-color: #FCEB74;
+	border-top: 10px solid transparent;
+	border-right: 15px solid transparent;
+	border-left: 10px solid transparent;
+	border-bottom: 15px solid transparent;
+	border-image:url("../img/frame.png") 5 stretch;
+	border-image-slice:10 15 15 10;*/
 }
 .frameTitle{
 	position:relative;		
 	background-color:rgb(96,51,255);
 	min-height:60px;
-	height:10%;
+	/*height:10%;*/
 	overflow:hidden;
+}
+#left_top_corner{
+	position: absolute;
+	top:0px;
+	left:0px;
+	bottom:0px;
+	right:0px;
+	/*background-color: #FCEB74;*/
+	border-top: 5px solid #122C9A;	
+	border-bottom: 5px solid #122C9A;
+	border-left: 5px solid #122C9A;
+	/*border-image:url("../img/frame-02.png") 5 stretch;
+	border-image-slice:13 21 5 13;*/
+
+}
+#left_top_corner_img{
+	position: absolute;
+	top:-5px;
+	left:-5px;
+}
+
+#music_wrapper{
+	border-right: 5px solid #122C9A;	
+	border-left: 5px solid #122C9A;	
+	position: relative;
+    /*top: -7.5px;*/
 }
 
 .innerFrame{
 	position:relative;
 	/*width:calc(100vw - 5px);*/
 	/*overflow:scroll;*/
-	min-height:90%;
+	min-height:calc(90% - 20px);
 	/*left:5px;*/
 	bottom:0px;
+	
+	/*border-top: 0px solid transparent;*/
+	border-right: 13px solid #122C9A;	
+	border-bottom: 13px solid #122C9A;
+	border-left: 5px solid #122C9A;
+	/*border-image:url("../img/frame-01.png") 5 stretch;
+	border-image-slice:0 13 13 5;*/
 
+}
+.vertCenterWrapper{
+	display: table;
+	height:100%;
+}
+.vertCenterChild{
+	display:table-cell;
+	vertical-align: middle;
 }
 .outerFrame{
 	position:absolute;
-	top:0px;
-	left:5px;
-	bottom:5px;
+	top:10px;
+	left:10px;
+	bottom:15px;
 	right:5px;
 }
 .overlapFrame{
@@ -72,19 +123,34 @@ body{
 	padding-right:10%;
 	padding-bottom:50px;
 	padding-top:50px;
+	opacity: 1;
+	transition: .3s ease-out;
+}
+.overlapFrame.hidden{
+	opacity: 0;
+	transition: .3s ease-out;
 }
 
 #title_logo{
 	position:absolute;
 	width:auto;
-	top:10%;
-	left:10px;
-	height:80%;
+	cursor: pointer;
+/*	top:10px;
+	left:10px;*/
+	/*height:80%;*/
 }
 #frame_button_wrapper{
-	width:20%;
+	/*width:20%;
 	float:right;
-	height:100%;
+	height:100%;*/
+	position: absolute;
+	right: 0px;
+	top:0px;
+	bottom:0px;
+
+	border-top: 5px solid #122C9A;
+	border-bottom: 5px solid #122C9A;
+	border-right: 13px solid #122C9A;
 }
 .frameButton{
 
@@ -96,22 +162,39 @@ body{
 	padding-bottom: 50%;*/
 	/*width:auto;*/
 	height:100%;
-	float:right;
+	/*float:right;*/
+	display: inline-block;
 
 	background-color:#FCEB74;
 	background-size:100% 200%;
 	background-repeat:none;
 	cursor:pointer;
-/*
+
+	overflow: hidden;
+/* 
 	border:5px solid;
 	border-color:#122C9A;*/
 }
 .noLeftBorder{
 	border-left-style:none;
 }
-#music_button{
+.musicButton{
 	/*background-image:url(../img/ui_sound.png);*/
+	position: absolute;
 	height:100%;
+	opacity: 1;
+	transition: 0.2s ease-in;
+}
+#music_button_off{
+	position: relative;
+}
+#music_button_on{
+	position: absolute;
+	top:0;
+	left:0;
+}
+.hidden{
+	opacity: 0;
 }
 #hambuger_button{
 	/*background-size:100% 100%;*/
@@ -128,4 +211,38 @@ canvas{
 
 .objMargin{
 	margin-top:40px;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 31px;
+ 
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+ background: #FCEB74;
+  border:5px solid #122C9A;
+  /* background-image: url("../img/scrollbar-thumb.png");*/
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /*background: #888; */
+ background: rgb(96,51,255); 
+
+  border:5px solid #122C9A;
+}
+::-webkit-scrollbar-button {
+  background-image: url("../img/scrollbar-up.png");
+  background-position: : center;
+  /*width:21px;*/
+  height:36px;
+    border-left:5px solid #122C9A;
+    border-right:5px solid #122C9A;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:increment{
+	 background-image: url("../img/scrollbar-down.png");
 }

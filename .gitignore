@@ -1,3 +1,7 @@
 *.png
 *.JPG
 *.wav
+
+*.sql
+node_modules/
+*.csv

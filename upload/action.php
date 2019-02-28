@@ -16,7 +16,10 @@
 	require_once('utils/uuid.generator.php');
 
 	//error_reporting(0);
-	
+	$request_url='https://mmlab.com.tw/project/youngvoice';
+	$share_url='https://mmlab.com.tw/project/youngvoice/upload/share.php?id=';
+	$data_folder='/sample/';
+	// $data_folder='/youngvoice/sample/';
 
 	try{
 		
@@ -35,10 +38,10 @@
 					$json['guid']=$guid;			
 
 
-					$url='http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/output/'.$guid.'.png';
-					
-					$escaped_url = htmlspecialchars( $url, ENT_QUOTES, 'UTF-8' );
-					$json['url']=$escaped_url;
+					$url=$share_url.$guid;
+					$json['size']=$_FILES['file']['size'];
+					// $escaped_url = htmlspecialchars( $url, ENT_QUOTES, 'UTF-8' );
+					$json['url']=$url;
 				}
 				echo json_encode($json);
 				break;
@@ -74,7 +77,8 @@
 				        $json['title']=$row['year'].'/'.$row['title'].'/'.$row['author'];
 						$json['type']=$row['type'];
 						$json['text']=$row['text'];
-						$json['imgurl']='http://'.$_SERVER['HTTP_HOST'].'/youngvoice/sample/'.$row['year'].'/'.$row['file'];
+						$imgfile_=str_replace('.JPG','.jpg',$row['file']);
+						$json['imgurl']=$request_url.$data_folder.$row['year'].'/'.$imgfile_;
 
 						echo utf8_encode(json_encode($json));
 				    }
