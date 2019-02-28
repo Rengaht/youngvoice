@@ -1,6 +1,7 @@
 
 var list_sentence,list_keyword,list_connection;
 var _index_keyword=0;
+var _index_connection=0;
 
 var _sentence='';
 var _keyword=[];
@@ -9,12 +10,14 @@ var _output_blob=null;
 function loadData(){
 	list_sentence=loader.resources['data/sentence.json'].data.start;
 	list_connection=loader.resources['data/sentence.json'].data.connect;
-	list_keyword=loader.resources['data/keyword.json'].data.keyword;
+	list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
 
 }
 
 function randomSentence(){
+	
 	_sentence=list_sentence[Math.floor(Math.random()*list_sentence.length)];
+	
 	return _sentence;
 }
 
@@ -50,24 +53,49 @@ function randomKeyword(){
 		key_=list_keyword[_index_keyword];
 		_index_keyword++;
 	}
+
+	if(_index_keyword>=list_keyword.length){
+		_index_keyword=0;
+		list_keyword=shuffle(list_keyword);
+	}
+
 	return key_;
 }
 function randomConnection(){
-	return list_connection[Math.floor(Math.random()*list_connection.length)];
+
+	let cnn=list_connection[_index_connection];
+
+	_index_connection++;
+	if(_index_connection>=list_connection.length){
+		_index_connection=0;
+	}
+
+	return cnn;
 }
 
 function renderImage(onFinish){
 
-	var minx=wwid,miny=whei;
-	let s_=_container_snake.children;
-	for(var k in s_){
-		let tx=s_[k].getChildAt(0).x;
-		let ty=s_[k].getChildAt(0).y;
+	// var minx=wwid,miny=whei;
+	// let s_=_container_snake.children;
+	// for(var k in s_){
+	// 	let tx=s_[k].getChildAt(0).x;
+	// 	let ty=s_[k].getChildAt(0).y;
+	// 	if(tx<minx) minx=tx;
+	// 	if(ty<miny) miny=ty;
+	// }
+	var minx=mgridx,miny=mgridy;
+	//
+	for(var k in _body){
+		let tx=_body[k].x;
+		let ty=_body[k].y;
 		if(tx<minx) minx=tx;
 		if(ty<miny) miny=ty;
 	}
-	// minx-gwid;
-	// miny-=gwid;
+	minx*=gwid;
+	miny*=gwid;
+
+	
+	let s_=_container_snake.children;
 	for(var k in s_){
 		s_[k].x-=minx;
 		s_[k].y-=miny;
@@ -81,7 +109,7 @@ function renderImage(onFinish){
 // let tmp_=new Sprite(resources['img/logo.png'].texture);
 // tmp_.y=100;
 // _container_tmp.addChild(tmp_);
-app.renderer.render(_container_tmp);
+	app.renderer.render(_container_tmp);
 	let url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
 	document.getElementById('dead_snake').src=url_;
 
@@ -110,7 +138,7 @@ function uploadImage(blob_){
 	var file=new File([blob_],'temp.png');
 	formData.append('file', blob_);
 
-	formData.append('keyword','test');
+	// formData.append('keyword','test');
 	$.ajax({
         type: 'POST',
         url: 'upload/action.php',
@@ -150,7 +178,8 @@ function getSample(){
 		key_=_keyword[Math.floor(Math.random()*_keyword.length)];
 	else 
 		key_=randomKeyword();
-	// console.log('get keyword: '+key_);
+
+	console.log('get keyword: '+key_);
 
 	formData.append('keyword',key_);
 

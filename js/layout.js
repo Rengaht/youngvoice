@@ -21,22 +21,21 @@ function loadGame(){
   'img/ui_replay.png','img/ui_share.png','img/ui_signup.png',
   'img/food/2-1.png','img/food/2-2.png','img/food/3-1.png','img/food/3-2.png','img/food/3-3.png','img/food/3-4.png',
   'img/food/4.png','img/food/5-1.png','img/food/5-2.png','img/food/5-3.png','img/food/5-4.png',
-  'data/keyword.json','data/sentence.json','data/food_pattern.json'
+  'img/textrunner/text-01.png','img/textrunner/text-03.png','img/textrunner/text-04.png','img/textrunner/text-05.png',
+  'img/textrunner/text-06.png','img/textrunner/text-07.png','img/textrunner/text-08.png','img/textrunner/text-09.png','img/textrunner/text-10.png',
+  'img/textrunner/text-12.png','img/textrunner/text-13.png','img/textrunner/text-14.png','img/textrunner/text-15.png',
+  'img/textrunner/text-16.png','img/textrunner/text-17.png','img/textrunner/text-18.png','img/textrunner/text-19.png','img/textrunner/text-20.png',
+  'img/textrunner/text-21.png','img/textrunner/text-22.png','img/textrunner/text-23.png','img/textrunner/text-24.png','img/textrunner/text-25.png',
+  'img/textrunner/text-26.png','img/textrunner/text-27.png','img/textrunner/text-28.png','img/textrunner/text-29.png',
+  'img/textrunner/text-31.png','img/textrunner/text-33.png',
+  'data/keyword.json','data/sentence.json','data/food_pattern.json',
+  
   ]).on('progress',loadProgressHandler).load(setup);
 
 
 }
 
-var sprite;
-function testsetup() {
-  sprite = new PIXI.Sprite(
-    PIXI.loader.resources["img/game.png"].texture
-  );
-  app.stage.addChild(sprite);
-  app.ticker.add(function(delata){
-    sprite.rotation+=1;
-  });
-}
+
 function setup(){
 
   // _bar.visible=false;
@@ -56,6 +55,7 @@ function setup(){
   // _container_game.mask=mask_;
   app.stage.addChild(_container_game);
 
+  setupRunner();
 
   setupGrid();
   setupSnake();
@@ -81,37 +81,34 @@ function resetGrid(){
   if(_graphics_grid===null) return;
 
 
-  app.stage.width=wwid;
-  app.stage.height=whei;
 
-  _container_game.width=wwid;
-  _container_game.height=whei;
+  // if(_container_snake){
+  //   var xmax=0,ymax=0;
+  //   for(var i in _body){
+  //     if(_body[i].x>xmax) xmax=_body[i].x;
+  //     if(_body[i].y>ymax) ymax=_body[i].y;
+  //   }
 
-  _graphics_grid.width=wwid;
-  _graphics_grid.height=whei;
+  //   xmax*=gwid;
+  //   ymax*=gwid;
+  //   let dx=pre_wid-xmax;
+  //   let dy=pre_hei-ymax;
 
-  _graphics_grid.clear();
-  _graphics_grid.beginFill(0xFFFFFF);
-  _graphics_grid.drawRect(0,0,wwid,whei);
-  _graphics_grid.endFill();
+  //   let s_=_container_snake.children;
+  //   for(var k in s_){
+  //       if(xmax>wwid) s_[k].x-=dx;
+  //       if(ymax>whei) s_[k].y-=dy;
+  //   }
+  //   let ss_=_container_shadow.children;
+  //   for(var k in ss_){
+  //       if(xmax>wwid) ss_[k].x-=dx;
+  //       if(ymax>whei) ss_[k].y-=dy;
+  //   }
+  // }
+  app.stage.addChild(_container_game);
 
-  for(var i=0;i<=mgridx;++i){
-    for(var j=0;j<=mgridy;++j){
-      if((i+j)%2==0) _graphics_grid.beginFill(0xE3D0E4,1);
-      else _graphics_grid.beginFill(0xE3D0E4,.5);
-      _graphics_grid.drawRect(i*gwid,j*gwid,gwid,gwid);
-      _graphics_grid.endFill();
-    }
-  }
-
-
-  // _graphics_grid.beginFill(0x241c83);
-  //   _graphics_grid.drawRect(gwid*mgridx,0,wwid-gwid*mgridx,whei);
-  //   _graphics_grid.drawRect(0,gwid*mgridy,wwid,whei-gwid*mgridy);
-  // _graphics_grid.endFill();
-
-  // _container_game.addChild(graphics_);
-  app.renderer.render(_graphics_grid);
+  app.renderer.render(app.stage);
+  
 }
 
 
