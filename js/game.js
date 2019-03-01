@@ -1,7 +1,7 @@
 let SNAKE_VEL_MIN=32;
 let SNAKE_VEL_MID=24;
 let SNAKE_VEL_MAX=8;
-let SNAKE_ACCELERATE=2;
+let SNAKE_ACCELERATE=3;
 
 let TAIL_APPEND_TIME=500;
 
@@ -10,6 +10,7 @@ let GG_TRANSITION_TIME=3000;
 let SNAKE_FONT_SIZE=40;
 let SHADOW_OFFSET=5;
 let START_TIMEOUT=500;
+let FOOD_RESET_TIME=400;
 
 let NEAR_FOOD_THRESHOLD=3;
 
@@ -50,7 +51,7 @@ function resetGame(){
 	_index_keyword=0;
 
 	// _container_hint.visible=true;
-	_frame_hint.style.display="block";
+	// $('#hint_frame').css("display","block");
 
 	resetSnake(randomSentence());
 	resetFood();
@@ -59,14 +60,15 @@ function resetGame(){
 
 	_keyword=[];
 	_word_eaten=[];
-
+	_index_connection=0;
+	
 	resetSampleText();
 	document.getElementById('dead_snake').src='';
 }
 function startGame(){
 
 	// _container_hint.visible=false;
-	_frame_hint.style.display="none";
+	$('#hint_frame').css("display","none");;
 	_last_ms=0;
 	_last_append=0;
 
@@ -205,7 +207,7 @@ function setupSnake(){
 		}
 
 
-		if(_frame_hint.style.display==="block"){
+		if($('#hint_frame').css("display")==="block"){
 			startGame();
 			return;			
 		}
@@ -242,25 +244,15 @@ function setupSnake(){
 		if(_last_vel!=='up') _vel='down';        
 	});
 	
-
-	_food_data=loader.resources['data/food_pattern.json'].data.patterns;
-	let flen=_food_data.length;
-	for(var i=0;i<flen;++i){
-		//_img_food.push(new Texture.from('img/'+_food_data[i].img));
-		_food_data[i]['texture']=new Texture.from('img/'+_food_data[i].img);
-	}
-	_food_scale=gwid/60;
-	
-
 	_snake_text_style = new PIXI.TextStyle({
-    	fontFamily: 'SnakeFont',
+    	fontFamily: 'IntroFont',
     	fontSize: gwid/60*SNAKE_FONT_SIZE,
     	fill:0x122C9A,
     	// letterSpacing:2,
     	// fontWeight:'bold'
 	});
 	_eaten_text_style = new PIXI.TextStyle({
-    	fontFamily: 'SnakeFont',
+    	fontFamily: 'IntroFont',
     	fontSize: gwid/60*SNAKE_FONT_SIZE,
     	fill:0xFFFFFF,
     	// letterSpacing:2,
@@ -268,19 +260,57 @@ function setupSnake(){
 	});
 
 	
-	for(var i=0;i<3;++i){
+	//_food_data=loader.resources['data/food_pattern.json'].data.patterns;
+	$.getJSON(DATA_URL+"data/food_pattern.json",function(json){
+		_food_data=json.patterns;
+		let flen=_food_data.length;
+		for(var i=0;i<flen;++i){
+			//_img_food.push(new Texture.from('img/'+_food_data[i].img));
+			_food_data[i]['texture']=new Texture.from('img/'+_food_data[i].img);
+			_food_data[i]['mask']=new Texture.from('img/'+_food_data[i].mask);
+		}
+		_food_scale=gwid/60;
+
+		for(var i=0;i<3;++i){
 		
-		let fd=getFoodOf(2);
-		let ff=new Sprite(fd.texture);
-		ff.scale.set(_food_scale);
-  		_container_food.addChild(ff);
+			let fd=getFoodOf(2);
+			let ff=new Sprite(fd.texture);
+			ff.scale.set(_food_scale);
+	  		
+			let fc=new Container();
+			fc.addChild(ff);
+
+			let glow=new Sprite(resources['img/food/glow.png'].texture);
+			let mask_=new PIXI.Sprite(fd.mask);
+			mask_.scale.set(_food_scale);
+			fc.addChild(mask_);
+			glow.mask=mask_;
 
 
-  		_food_pattern.push(fd);
+			app.ticker.add(function(){
+				let w=glow.parent.children[0].width;
+				glow.x=(glow.x+3*Math.abs(Math.sin(app.ticker.lastTime)));
+				if(glow.x>w) glow.x=-w;
+			});
+			fc.addChild(glow);
 
-  		let text_=new Container();
-  		_container_food.addChild(text_);
-	}
+	  		_container_food.addChild(fc);
+
+
+
+	  		_food_pattern.push(fd);
+
+	  		let text_=new Container();
+	  		_container_food.addChild(text_);
+		}
+
+	});
+
+	
+	
+
+	
+	
 
 	_container_game.visible=false;
 }
@@ -314,8 +344,11 @@ function resetSnake(sentence_){
   
   resetBodyPos(sentence_.length);
   _container_snake.removeChildren();
+  _container_snake.x=0;
+  _container_snake.y=0;
   _container_shadow.removeChildren();
-
+  _container_shadow.x=0;
+  _container_shadow.y=0;
 
   let head_container=new Container();
   let shead_container=new Container();
@@ -495,14 +528,14 @@ function checkSnakePos(){
 		    if(ppx===pos_.x && ppy===pos_.y){
 
 
-		    	if(_play_sound) playEatSound();
+		    	playEatSound();
 
 
 		    	let w=_food[i].word;
 				console.log('eat '+w);
 				_keyword.push(w);
 
-				_snake_vel-=SNAKE_ACCELERATE*(_keyword.length);
+				_snake_vel-=SNAKE_ACCELERATE;
 				if(_snake_vel<SNAKE_VEL_MAX) _snake_vel=SNAKE_VEL_MAX;
 
 		    	let word_add=w+randomConnection();
@@ -521,7 +554,7 @@ function checkSnakePos(){
 
 		    	setTimeout(function(){
 		    		if(!snake_stop) resetFood();
-		    	},TRANSITION_TIME);
+		    	},FOOD_RESET_TIME);
 		    	return false;
 		    }else{
 		    	let dist_=Math.sqrt(Math.pow(ppx-pos_.x,2)+Math.pow(ppy-pos_.y,2));
@@ -602,7 +635,7 @@ function killSnake(){
 	app.renderer.render(_container_snake);
 	app.ticker.remove(updateSnake);
 
-	if(_play_sound) playDeadSound();
+	playDeadSound();
 
 	_pre_shadow_pos.x=_container_shadow.x;
 	_pre_shadow_pos.y=_container_shadow.y;
@@ -729,7 +762,10 @@ function resetFood(){
 
 		let ff=_container_food.getChildAt(i*2);
 
-		ff.texture=fp.texture;
+		ff.getChildAt(0).texture=fp.texture;
+		ff.getChildAt(1).texture=fp.mask;
+		
+
   		ff.scale.set(_food_scale,_food_scale);
   		ff.x=gwid*f.x;
   		ff.y=gwid*f.y;
@@ -753,6 +789,8 @@ function resetFood(){
 		_food_pattern.push(fp);
 	}
 	_container_food.visible=true;
+
+	if(_keyword.length>0) playPopSound();
 }
 function generateFood(food_data){
 

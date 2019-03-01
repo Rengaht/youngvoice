@@ -63,7 +63,7 @@ function setupPixi(){
   window.addEventListener('resize', resize);
   doResize();
 
-  loadGame();
+  
 
 }
 
@@ -75,11 +75,31 @@ function resize(){
 
 function doResize(){
 
+  let ww_=$(window).width();
+  let wh_=$(window).height();
+
+  let tmpw_=ww_*.99;
+  let tmph_=wh_*.99;
+
+  let tt=$('#frame_title').height();
+  let innerw=tmpw_-5-13;
+  let innerh=tmph_-tt-10-13;
+
+  tmpw_=Math.floor(innerw/60)*60;
+  tmph_=Math.floor(innerh/60)*60;
+  $('#outer_frame').css('width',(tmpw_+13+5)+'px');
+  $('#outer_frame').css('height',(tmph_+tt+10+13)+'px');
+  $('#outer_frame').css('left',((ww_-8)/2-(tmpw_+18)/2)+'px');
+  $('#outer_frame').css('top',(wh_/2-(tmph_+tt+23)/2)+'px');
+
+  $('#inner_frame').css('min-height',tmph_+'px');
+
+
   app.stage.removeChild(_container_game);
 
   // const parent = app.view.parentNode;
-  const parent=document.getElementsByClassName('innerFrame')[0];
-  app.renderer.resize(parent.clientWidth, parent.clientHeight);
+  // const parent=document.getElementsByClassName('innerFrame')[0];
+  app.renderer.resize(tmpw_,tmph_);
   // rect.position.set(app.screen.width, app.screen.height);
   // app.renderer.view.style.width=parent.clientWidth+'px';
   // app.renderer.view.style.height=parent.clientHeight+'px';
@@ -87,8 +107,8 @@ function doResize(){
   pre_wid=wwid;
   pre_hei=whei;
 
-  wwid=app.screen.width;
-  whei=app.screen.height;
+  wwid=tmpw_;
+  whei=tmph_;
   console.log('reset size:'+wwid+' x '+whei);
 
   landscape=(wwid>whei);
@@ -106,12 +126,27 @@ function doResize(){
 }
 
 
+var loading_progress=0;
+var progress_after_font;
 
-
+function loadingSnake(){
+  loading_progress=Math.min(loading_progress+1,20);
+  setLoadingProgress();
+}
 function loadProgressHandler(loader,resource){
   //console.log('progress: '+loader.progress+'%');
   // if(_bar_snake && _bar) _bar_snake.width=_bar.width*loader.progress/100.0;
+  loading_progress=(100-progress_after_font)/100*loader.progress+progress_after_font;
+  setLoadingProgress();
 
 }
+function setLoadingProgress(){
+  let dest_len=297;
+  let src_len=20;
 
+  let current_len=(dest_len-src_len)/100*loading_progress+src_len;
+
+  $('#loading_snake_body').css('width',current_len);
+  $('#loading_snake_head').css('left',current_len+33);
+}
 

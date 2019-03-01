@@ -1,13 +1,31 @@
+
+function loadPreElement(){
+
+  loader.add([
+  'img/logo.png',
+  'img/textrunner/text-01.png','img/textrunner/text-03.png','img/textrunner/text-04.png','img/textrunner/text-05.png',
+  'img/textrunner/text-06.png','img/textrunner/text-07.png','img/textrunner/text-08.png','img/textrunner/text-09.png','img/textrunner/text-10.png',
+  'img/textrunner/text-12.png','img/textrunner/text-13.png','img/textrunner/text-14.png','img/textrunner/text-15.png',
+  'img/textrunner/text-16.png','img/textrunner/text-17.png','img/textrunner/text-18.png','img/textrunner/text-19.png','img/textrunner/text-20.png',
+  'img/textrunner/text-21.png','img/textrunner/text-22.png','img/textrunner/text-23.png','img/textrunner/text-24.png','img/textrunner/text-25.png',
+  'img/textrunner/text-26.png','img/textrunner/text-27.png','img/textrunner/text-28.png','img/textrunner/text-29.png',
+  'img/textrunner/text-31.png','img/textrunner/text-33.png'  
+  ]).load(function(){
+       console.log('finish preloading!');
+       loadFont();  
+       loadMusic();
+
+  });
+
+}
+
 function loadGame(){
   // loader.add([
   // 'img/bgd.png','img/frame.png','img/frame-shadow.png','img/logo.png','img/bar.png','img/bar-snake.png','img/title.png','img/title-text.png',
   // 'img/ui_sound.png','img/hambuger.png','img/ui_start.png'
   // ]).load(setupbgd);
 
-  loader.add([
-  'img/logo.png',
-  'img/ui_iknow.png',
-  'img/game.png','img/team.png','img/website.png','img/info.png','img/info_back.png',
+  loader.add([ 
   'img/hint-mobile.png','img/hint-pc.png',
   'img/snake/head-normal.png','img/snake/head-eat.png','img/snake/head-dead.png',
   'img/snake/body-horizontal.png','img/snake/body-vertical.png',
@@ -17,44 +35,45 @@ function loadGame(){
   'img/snake/shadow-horizontal.png','img/snake/shadow-vertical.png',
   'img/snake/shadow-left-top.png','img/snake/shadow-left-bottom.png','img/snake/shadow-right-top.png','img/snake/shadow-right-bottom.png',
   'img/snake/shadow-tail.png',
-  'img/recommand.png',
-  'img/ui_replay.png','img/ui_share.png','img/ui_signup.png',
+  'img/food/glow.png',
   'img/food/2-1.png','img/food/2-2.png','img/food/3-1.png','img/food/3-2.png','img/food/3-3.png','img/food/3-4.png',
   'img/food/4.png','img/food/5-1.png','img/food/5-2.png','img/food/5-3.png','img/food/5-4.png',
-  'img/textrunner/text-01.png','img/textrunner/text-03.png','img/textrunner/text-04.png','img/textrunner/text-05.png',
-  'img/textrunner/text-06.png','img/textrunner/text-07.png','img/textrunner/text-08.png','img/textrunner/text-09.png','img/textrunner/text-10.png',
-  'img/textrunner/text-12.png','img/textrunner/text-13.png','img/textrunner/text-14.png','img/textrunner/text-15.png',
-  'img/textrunner/text-16.png','img/textrunner/text-17.png','img/textrunner/text-18.png','img/textrunner/text-19.png','img/textrunner/text-20.png',
-  'img/textrunner/text-21.png','img/textrunner/text-22.png','img/textrunner/text-23.png','img/textrunner/text-24.png','img/textrunner/text-25.png',
-  'img/textrunner/text-26.png','img/textrunner/text-27.png','img/textrunner/text-28.png','img/textrunner/text-29.png',
-  'img/textrunner/text-31.png','img/textrunner/text-33.png',
-  'data/keyword.json','data/sentence.json','data/food_pattern.json',
-  'sound/back.wav','sound/dead.wav','sound/eat.wav'
-  ]).on('progress',loadProgressHandler).load(setup);
+  'img/food/mask-2-1.png','img/food/mask-2-2.png','img/food/mask-3-1.png','img/food/mask-3-2.png','img/food/mask-3-3.png','img/food/mask-3-4.png',
+  'img/food/mask-4.png','img/food/mask-5-1.png','img/food/mask-5-2.png','img/food/mask-5-3.png','img/food/mask-5-4.png'
+  ]).on('progress',loadProgressHandler).load(function(){
+    setup();
+    console.log('finish loading fame!');
+  });
 
 
 }
 
+var id_loading_font;
 function loadFont(){
   WebFont.load({
       custom:{
         families:['SnakeFont','IntroFont']
       },
-      active:loadFontFinish
+      loading:loadFontFinish
     });
+  id_loading_font=setInterval(loadingSnake,300);
 }
 function loadFontFinish(){
-  console.log("finish loading font!");
+  console.log('finish loading font!');
+  
+  clearInterval(id_loading_font);
+
+  progress_after_font=loading_progress;
+  loadGame();
+
+
 }
 
 
 function setup(){
 
-  // _bar.visible=false;
-  // _bar_snake.visible=false;
-  // _btn_start.visible=true;
-  // _snake_stop=true;
-  
+  showStart();
+
   loadData();
 
   _container_game=new PIXI.Container();
@@ -75,6 +94,11 @@ function setup(){
   
 }
 
+function showStart(){
+  $('#start_button').css('display','block');
+  $('#loading_bar').css('display','none');
+}
+
 
 function setupGrid(){
 
@@ -85,16 +109,6 @@ function setupGrid(){
   // _graphics_grid.beginFill(0xFFFFFF);
   // _graphics_grid.drawRect(0,0,wwid,whei);
   // _graphics_grid.endFill();
-
-  for(var i=0;i<=mgridx;++i){
-    for(var j=0;j<=mgridy;++j){
-      if((i+j)%2==0) _graphics_grid.beginFill(0xE8D9E9,1);
-      else _graphics_grid.beginFill(0xE7D4E8,1);
-      _graphics_grid.drawRect(i*gwid,j*gwid,gwid,gwid);
-      _graphics_grid.endFill();
-    }
-  }
-
 
 
   resetGrid();
@@ -126,7 +140,7 @@ function setSampleText(data_){
      document.getElementById('sample_text').innerHTML='oops! 資料庫建置中!';  
   }else{      
     document.getElementById('sample_text').innerHTML=data_.title+'<br>'+data_.text;
-    if(data_.type!='text'){
+    if(data_.type!=='text'){
         document.getElementById('sample_image').src=data_.imgurl;
     }
   }

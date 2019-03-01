@@ -1,7 +1,4 @@
- @font-face {
-	font-family: 'SnakeFont';
-	src:url("../font/PingFang Bold.ttf");
-}
+
 @font-face {
 	font-family: 'IntroFont';
 	src:url("../font/PingFang Bold.ttf");
@@ -131,14 +128,7 @@ body{
 	transition: .3s ease-out;
 }
 
-#title_logo{
-	position:absolute;
-	width:auto;
-	cursor: pointer;
-/*	top:10px;
-	left:10px;*/
-	/*height:80%;*/
-}
+
 #frame_button_wrapper{
 	/*width:20%;
 	float:right;
@@ -174,6 +164,12 @@ body{
 /* 
 	border:5px solid;
 	border-color:#122C9A;*/
+}
+#title_logo{
+	position:absolute;
+	width:auto;
+	cursor: pointer;
+
 }
 .noLeftBorder{
 	border-left-style:none;

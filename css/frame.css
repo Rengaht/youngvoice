@@ -87,9 +87,10 @@
 }
 #website_link{
 	width:calc(50% - 10px);
-	/*margin-left:20%;*/
+	margin-bottom:-24px;
 	display:inline-block;
 	vertical-align:bottom;
+	cursor:pointer;
 	/*float:right;*/
 }
 
@@ -153,14 +154,60 @@
 /* start */
 .startButton{
 	background-image:url("../img/ui_start.png");
-	background-repeat: no-repeat;
-	/*transition:0.1s ease-out;*/
+	background-repeat: no-repeat;		
+	display: none;
 }
+
 .startButton.pressed{
 	background-image:url("../img/ui_start_pressed.png");
 	/*background-position:0 100%;*/
 }
+#loading_text{
+	height: 100px;
+	width:500px;
+}
+.loadingBar{
+	position: relative;
+	top:24px;
+	width:363px;
+	height:27px;
+	background-image:url("../img/bar.png");
+}
+#loading_snake_tail{
+	position: absolute;
+	left:0;
+}
+#loading_snake_body{
+	background-image:url("../img/loading-snake-02.png");	
+	background-repeat: repeat-x;
+	position: absolute;
+	left:33px;
+	width:20px;
+	height:26px;	
+	transition: .1s linear;
+}
+#loading_snake_head{
+	position: absolute;
+	left:53px;
+	top:-5px;
+	transition: .1s linear;
+}
 
+#start_logo{
+	position: relative;
+	/*animation-name: logoFloat;
+	animation-duration: .5s;
+	animation-iteration-count:infinite;
+	animation-timing-function:ease-in;*/
+}
+@keyframes logoFloat{
+    from{
+        top:0px;
+    }
+    to{
+        top:5px;
+    }
+}
 
 /* result */
 

@@ -1,4 +1,6 @@
 
+let DATA_URL="https://mmlab.com.tw/project/youngvoice/";
+
 var list_sentence,list_keyword,list_connection;
 var _index_keyword=0;
 var _index_connection=0;
@@ -7,10 +9,21 @@ var _sentence='';
 var _keyword=[];
 var _output_blob=null;
 
+var _snake_crop=null;
+var _output_container=null;
+
 function loadData(){
-	list_sentence=loader.resources['data/sentence.json'].data.start;
-	list_connection=loader.resources['data/sentence.json'].data.connect;
-	list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
+
+	$.getJSON(DATA_URL+"data/sentence.json",function(json){
+		list_sentence=json.start;
+		list_connection=json.connect;
+	});	
+	$.getJSON(DATA_URL+"data/keyword.json",function(json){
+		list_keyword=json.keyword;
+	});
+	// list_sentence=loader.resources['data/sentence.json'].data.start;
+	// list_connection=loader.resources['data/sentence.json'].data.connect;
+	// list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
 
 }
 
@@ -84,70 +97,82 @@ function renderImage(onFinish){
 	// 	if(ty<miny) miny=ty;
 	// }
 	var minx=mgridx,miny=mgridy;	
-	//
 	for(var k in _body){
 		let tx=_body[k].x;
 		let ty=_body[k].y;
 		if(tx<minx) minx=tx;
 		if(ty<miny) miny=ty;
 	}
-	minx*=gwid;
-	miny*=gwid;
+	minx=(minx-1)*gwid;
+	miny=(miny-1)*gwid;
+	// maxy=(maxy+1)*gwid;
+	// maxx=(maxx+1)*gwid;
 
 	_container_snake.x-=minx;
 	_container_snake.y-=miny;
 	_container_shadow.x-=minx;
 	_container_shadow.y-=miny;
 
-	// let s_=_container_snake.children;
-	// for(var k in s_){
-	// 	s_[k].x-=minx;
-	// 	s_[k].y-=miny;
-	// }
-	// let ss_=_container_shadow.children;
-	// for(var k in ss_){
-	// 	ss_[k].x-=minx;
-	// 	ss_[k].y-=miny;
-	// }
-
+	_snake_crop=new PIXI.Sprite(Texture.EMPTY);
+	_snake_crop.x=0;
+	_snake_crop.y=0;
+	_snake_crop.width=Math.max(_container_snake.width,_container_shadow.width)+2*gwid;
+  	_snake_crop.height=Math.max(_container_snake.height,_container_shadow.height)+2*gwid;
+  	_container_tmp.addChildAt(_snake_crop,0);
+ //  	_container_tmp.mask=mask_;
 
 	app.renderer.render(_container_tmp);
 	let url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
 	document.getElementById('dead_snake').src=url_;
 
+	_container_tmp.removeChild(_snake_crop);
 	
-	_container_snake.x+=minx;
-	_container_snake.y+=miny;
-	_container_shadow.x+=minx;
-	_container_shadow.y+=miny;
-	
-
-	// draw tmp grid
-	// _graphics_grid.addChild(_container_tmp);
-
-
-	// app.renderer.extract.canvas(_container_tmp).toBlob(function(b){
-	// 	output_blob=b;		
-
-	// 	// _graphics_grid.removeChild(_container_tmp);
-
-	// }, 'image/png');
 }
 function uploadImage(){
 
 	_container_tmp.visible=true;
 
-	app.stage.removeChild(_container_game);	
-	_graphics_grid.addChild(_container_game);
+	// app.stage.removeChild(_container_game);	
+	if(_output_container===null) _output_container=new Container();
+
+	_output_container.removeChildren();
+
+	_container_game.removeChild(_container_tmp);
+	let owid=Math.max(_snake_crop.width,600);
+
+	let mx=Math.floor(owid/gwid);
+	let my=Math.floor(_snake_crop.height/gwid);
+	_graphics_grid.clear();
+	for(var i=0;i<=mx;++i){
+	    for(var j=0;j<=my;++j){
+	      if((i+j)%2==0) _graphics_grid.beginFill(0xE8D9E9,1);
+	      else _graphics_grid.beginFill(0xE7D4E8,1);
+	      _graphics_grid.drawRect(i*gwid,j*gwid,gwid,gwid);
+	      _graphics_grid.endFill();
+	    }
+	}
+
+	_output_container.addChild(_graphics_grid);
+	_output_container.addChild(_container_tmp);
+	_container_tmp.x=owid/2-_container_tmp.width/2;
+	
+	// _graphics_grid.addChild(_snake_crop);
+	// _graphics_grid.mask=_snake_crop;
 
 	
-	app.renderer.extract.canvas(_graphics_grid).toBlob(function(b){
+	app.renderer.extract.canvas(_output_container).toBlob(function(b){
 		// output_blob=b;		
 
 		// _container_tmp.visible=false;
-		app.stage.addChild(_container_game);
 		
-		_graphics_grid.removeChild(_container_game);
+		
+		// _snake_crop.removeChild(_snake_crop);
+		_output_container.removeChild(_graphics_grid);
+		_output_container.removeChild(_container_tmp);		
+
+		//app.stage.addChild(_container_game);
+		_container_game.addChild(_container_tmp);
+		_container_tmp.x=0;
 
 		var formData = new FormData();
 		formData.append('action', 'upload');
@@ -158,7 +183,7 @@ function uploadImage(){
 		// formData.append('keyword','test');
 		$.ajax({
 	        type: 'POST',
-	        url: 'upload/action.php',
+	        url: DATA_URL+'upload/action.php',
 	        data: formData,
 	        processData: false,
 	        contentType: false,
@@ -186,7 +211,8 @@ function shareImage(url_){
   +'&href='+encodeURIComponent(url_)
   +'&redirect_uri='+encodeURIComponent('https://mmlab.com.tw/project/youngvoice/upload/redirect.html');
 
-  window.open(surl_,'_blank');
+  if(_mobile) window.location.href=surl_;
+  else window.open(surl_,'_blank');
 
 }
 
@@ -206,7 +232,7 @@ function getSample(){
 
 	$.ajax({
         type: 'POST',
-        url: 'https://mmlab.com.tw/project/youngvoice/upload/action.php',
+        url:DATA_URL+'upload/action.php',
         data: formData,
         processData: false,
         contentType: false,

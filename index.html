@@ -6,6 +6,13 @@
   <link rel="bookmark" href="favicon.ico"/>
 
   <title>吃吃真心話</title>
+  <meta property="fb:app_id" content="262109598012691" />
+  <meta property="og:title" content="吃吃真心話" />
+   <meta property="og:type" content="website" />
+  <meta property="og:description" content="這是一個喜歡吃內心話的貪食蛇。特別喜歡青春的心。" />
+  <meta property="og:url" content=" http://mmlab.com.tw/project/youngvoice/index.html" />
+ <meta property="og:image" content="http://mmlab.com.tw/project/youngvoice/img/fb-meta-01.png" />  
+
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="css/frame.css">
 
@@ -22,6 +29,7 @@
   
   <script src="js/text_runner.js"></script>
   <script src="js/page.js"></script>
+  <script src="js/sound.js"></script>
 
   <script src="js/layout.js"></script>
   
@@ -31,7 +39,7 @@
    
 </head>
   <script src="pixi/pixi.min.js"></script>
-  
+
 <body>
   <div id="outer" class="outerWrapper">
   
@@ -39,8 +47,8 @@
     <!-- <img src="img/frame-shadow.png" class="img_frame shadow"/> -->
     <div id="back_frame"></div>
     
-    <div class="outerFrame">
-      <div class="frameTitle">
+    <div class="outerFrame" id="outer_frame">
+      <div class="frameTitle" id="frame_title">
         <div id="left_top_corner">
           <img src="img/title-text.png" id="title_logo" onClick="onClickTitle()"/>   
           <img src="img/frame-08.png" id="left_top_corner_img"/>
@@ -58,7 +66,7 @@
         <img src="img/frame-09.png" id="right_top_corner"/>        
       </div>
 
-      <div class="innerFrame">
+      <div class="innerFrame" id="inner_frame">
         <div id="pixi_frame" class="overlapFrame"></div>
         <div id="hint_frame" class="overlapFrame hidden" onClick="onClickHint()">
            <div class="vertCenterWrapper Center">
@@ -72,8 +80,13 @@
           <div class="vertCenterWrapper Center">
             <div class="vertCenterChild">
               <img src="img/logo.png" id="start_logo" class="Center"/>
+              <div class="Center objMargin loadingBar" id="loading_bar">                
+                <img src="img/loading-snake-01.png" id="loading_snake_tail">
+                <div id="loading_snake_body"></div>
+                <img src="img/loading-snake-03.png" id="loading_snake_head">
+              </div>
               <div class="Center uiButton objMargin startButton" id="start_button" onClick="onClickStart()"></div>
-              <div class="Center" id="loading_text"></div>          
+              <div class="Center objMargin" id="loading_text"></div>          
             </div>
           </div>
         </div>
@@ -132,8 +145,8 @@
                  <div class="intro_right_border"></div>
                   <div class="intro_bottom_border"></div>
               </div>
-              <div id="website_link">
-                <a href="http://www.youngvoice.tw" target="_blank">
+              <div id="website_link" onClick="onClickWebsite()">
+                <!-- <a href="http://www.youngvoice.tw"> -->
                   <img src="img/website.png" style="float:right;" /></a>
               </div>
               <div class="introDialogue">
@@ -164,7 +177,10 @@
   <!-- <audio id="sound_back" src="sound/back.wav" preload="auto"></audio> -->
   <!-- <script src="js/test.js"></script> -->
    <script src="js/snake.js"></script>
-  
+   <script>
+    setupPixi(); 
+    loadPreElement();
+  </script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80306203-6"></script>

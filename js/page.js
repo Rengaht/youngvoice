@@ -2,26 +2,15 @@
 
 var _frame_intro,_frame_game,_frame_result,_frame_start,_frame_hint;
 
-let _sound_back,_sound_eat,_sound_dead;
-var _play_sound=true;
+
 var _first_intro=false;
 var _display_intro=false;
 
 window.onload=function(){
 
-  _frame_intro=document.getElementById('intro_frame');
-  _frame_hint=document.getElementById('hint_frame');
-  _frame_start=document.getElementById('start_frame');
-  _frame_result=document.getElementById('result_frame');
-  _frame_game=document.getElementById('pixi_frame');
+ 
 
-
-  setupPixi();
-  
-
-  loadFont();  
-  loadMusic();
-
+ 
   if(_mobile) document.getElementById('hint_image').src="img/hint-mobile.png";
   else document.getElementById('hint_image').src="img/hint-pc.png";
 }
@@ -29,7 +18,9 @@ window.onload=function(){
 
 
 function onClickStart(){
- 
+
+  playButtonSound();
+
   $('#start_button').addClass('pressed');
   setTimeout(function(){
 
@@ -39,6 +30,7 @@ function onClickStart(){
 
       _first_intro=true;
       $('#intro_frame').css('display','block');
+      $('#iknow_button').removeClass('pressed');
       _display_intro=true;
       
       setTimeout(function(){
@@ -62,18 +54,20 @@ function showGame(){
   // $('#pixi_frame').css('display','block');
   _container_game.visible=true;
   $('#hint_frame').css('display','block');
-  setTimeout(function(){
-    // $('#pixi_frame').removeClass('hidden');
-    $('#hint_frame').removeClass('hidden');
-  },10);
+  $('#hint_frame').removeClass('hidden');
+  // setTimeout(function(){
+  //   // $('#pixi_frame').removeClass('hidden');
+    
+  // },10);
   
   setTimeout(function(){
      $('#start_frame').css('display','none'); 
-  },300);
+  },10);
 }
 
 function onClickIknow(){
   
+  playButtonSound();
   $('#iknow_button').addClass('pressed');
 
   setTimeout(function(){
@@ -93,13 +87,14 @@ function onClickIknow(){
       }else{
         if(_container_game.visible) startGame();
       }
-    },300);
+    },10);
 
-  },300);
+  },100);
 
 }
 function onClickReplay(){
     
+    playButtonSound();
     $('#replay_button').addClass('pressed');
 
     setTimeout(function(){
@@ -108,21 +103,36 @@ function onClickReplay(){
         $('#result_frame').css('display','none');
         resetGame();
         showGame();
-      },300);
-    },200);
+      },100);
+    },100);
 }
 function onClickShare(){
+
+  playButtonSound();
   $('#share_button').addClass('pressed');
   setTimeout(function(){
     uploadImage();
-  },200);
+  },50);
   
 }
 function onClickSignUp(){
+
+   playButtonSound();
   $('#signup_button').addClass('pressed');
   setTimeout(function(){
-       window.open("http://www.youngvoice.tw/content/award/award_index.aspx?id=10",'_blank');
-  },200);
+      if(_mobile) window.location.href="http://www.youngvoice.tw/content/award/award_index.aspx?id=10";
+      else window.open("http://www.youngvoice.tw/content/award/award_index.aspx?id=10",'_blank');
+  },100);
+
+}
+
+function onClickWebsite(){
+
+  playButtonSound();
+  setTimeout(function(){
+      if(_mobile) window.location.href="http://www.youngvoice.tw";
+      else window.open("http://www.youngvoice.tw",'_blank');
+  },100);
 
 }
 
@@ -156,7 +166,7 @@ function onClickTitle(){
     
 }
 function onClickHint(){
-  if(_frame_hint.style.display==='block') startGame();
+  if($('#hint_frame').css('display')==='block') startGame();
 }
 
 function resetIntro(){
@@ -168,6 +178,8 @@ function toggleIntro(){
   if(_display_intro){
       $('#intro_frame').css('display','block');
       $('#intro_frame').removeClass('hidden');  
+      $('#iknow_button').removeClass('pressed');
+
       setTimeout(function(){
         pauseGame();
       },300);
@@ -181,58 +193,4 @@ function toggleIntro(){
       },300);
   }
   
-}
-function loadMusic(){  
-  _sound_back=new Howl({
-    src:['sound/back.wav','sound/back.ogg'],
-    loop:true,
-    onend: function() {
-      // console.log('Finished!');
-    },
-    onplayerror: function() {
-      _sound_back.once('unlock', function() {
-        _sound_back.play();
-      });
-    }
-  });
-
-  _sound_eat=new Howl({
-    src:['sound/eat.wav','sound/eat.ogg']
-  });
-  _sound_dead=new Howl({
-    src:['sound/dead.wav','sound/dead.ogg']
-  });
-  _play_sound=false;
-}
-
-function  toggleMusic(){
-    _play_sound=!_play_sound;
-    if(!_play_sound){
-      _sound_back.pause();
-     
-      $('#music_button_on').addClass('hidden');
-      $('#music_button_off').removeClass('hidden');
-    }else{
-      _sound_back.play();
-      $('#music_button_off').addClass('hidden');
-      $('#music_button_on').removeClass('hidden');
-    }
-
-}
-
-function playBackMusic(){
-  console.log('play bgm!!');
-  _play_sound=true;
-  _sound_back.play();   
-  
- // document.getElementById('music_button').src="img/ui_sound.png";
-  $('#music_button_off').addClass('hidden');
-  $('#music_button_on').removeClass('hidden');
-}
-function playEatSound(){
-  _sound_eat.play();
-}
-function playDeadSound(){
-  _sound_dead.play();
-
 }

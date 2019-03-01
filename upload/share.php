@@ -20,8 +20,8 @@
 <body>
 	<script>
 		setTimeout(function(){
-			window.location.href="http://mmlab.com.tw/project/youngvoice";
-		},500);
+			window.location.href="http://game.youngvoice.tw";
+		},100);
 	</script>
 </body>
 
