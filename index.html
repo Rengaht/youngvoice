@@ -10,8 +10,8 @@
   <meta property="og:title" content="吃吃真心話" />
    <meta property="og:type" content="website" />
   <meta property="og:description" content="這是一個喜歡吃內心話的貪食蛇。特別喜歡青春的心。" />
-  <meta property="og:url" content=" http://mmlab.com.tw/project/youngvoice/index.html" />
- <meta property="og:image" content="http://mmlab.com.tw/project/youngvoice/img/fb-meta-01.png" />  
+  <meta property="og:url" content=" http://game.youngvoice.tw" />
+ <meta property="og:image" content="http://game.youngvoice.tw/img/facebook_meta_1.png" />  
 
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="css/frame.css">
@@ -21,30 +21,28 @@
   <script>
     var mobile_detect=new MobileDetect(window.navigator.userAgent);
     let _mobile=(mobile_detect.mobile()!=null);
+
   </script>
   
   <script src="pixi/jquery-3.3.1.min.js"> </script>
   <script src="pixi/hammer.min.js"></script>
   <script src="pixi/howler.core.js"></script>
   
-  <script src="js/text_runner.js"></script>
-  <script src="js/page.js"></script>
-  <script src="js/sound.js"></script>
+<!-- <script src="js/data.js"></script>
+<script src="js/game.js"></script>
+<script src="js/page.js"></script>
+<script src="js/snake.js"></script>
+<script src="js/text_runner.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/sound.js"></script> -->
 
-  <script src="js/layout.js"></script>
-  
-  <script src="js/data.js"></script>
-  <script src="js/game.js"></script> 
-
-   
+   <script src="js/snake.min.js"></script>
 </head>
   <script src="pixi/pixi.min.js"></script>
 
 <body>
   <div id="outer" class="outerWrapper">
   
-   
-    <!-- <img src="img/frame-shadow.png" class="img_frame shadow"/> -->
     <div id="back_frame"></div>
     
     <div class="outerFrame" id="outer_frame">
@@ -92,27 +90,26 @@
         </div>
 
         <div id="result_frame" class="overlapFrame hidden">
-          <div class="Center objMargin" id="result_top">
+          <div class="Center" id="result_top" style="margin-top:5%">
             <img src="img/logo.png" id="end_logo"/>
-            <div id="dead_wrapper">
-              <div style="display:flex; width:100%; height:100%">
-              <img id="dead_snake" class="Center"/>
+            <div class="resultButtonWrapper">
+              <div class="resultButton" id="replay_button" onClick="onClickReplay()"></div>
+              <div style="width:268px; display:inline-block;margin-left:10px;float:right">
+                <div class="resultButton" id="share_button" onClick="onClickShare()"></div>              
+                  <div class="resultButton" id="signup_button" onClick="onClickSignUp()"></div>
               </div>
             </div>
           </div>
           
-          <div class="Center objMargin">
-            <div class="resultButton" id="replay_button" onClick="onClickReplay()"></div>
-            <div class="resultButton" id="share_button" onClick="onClickShare()"></div>
-            <!-- <a href="http://www.youngvoice.tw/content/award/award_index.aspx?id=10" target="_blank"> -->
-              <div class="resultButton" id="signup_button" onClick="onClickSignUp()"></div>
-            <!-- </a> -->
+          <div class="Center">            
+            <div id="dead_wrapper"></div>
           </div>
 
           <div class="introDialogue" id="sample_dialogue">           
-            <div class="introTextWrapper">  
-              <p class="introText" id="sample_text"></p>   
-              <div id="sample_image_wrapper" class="objMargin">
+            <div class="introTextWrapper" style="padding:60px 20px 30px 40px">  
+              <p class="TitleFont introText" id="sample_title"></p>   
+              <p class="ContentFont introText" id="sample_text"></p>   
+              <div id="sample_image_wrapper">
                 <img class=Center id='sample_image'/>   
                 <img src="img/frame-sample-01.png" id="sample_image_left_top"/>
                 <img src="img/frame-sample-02.png" id="sample_image_left_bottom"/>
@@ -136,7 +133,7 @@
             <div class="vertCenterChild">
               <div class="introDialogue" id="game_intro">
                <div class="introTextWrapper">
-                  <p class="introText">這是一個喜歡吃內心話的貪食蛇。特別喜歡青春的心。</p>
+                  <p class="ContentFont introText">這是一個喜歡吃內心話的貪食蛇。特別喜歡青春的心。</p>
                 </div>
                  <img class="introTitle" src="img/game.png"/>     
                   <img src="img/frame-intro-10.png" class="intro_left_bottom_corner"/>
@@ -149,10 +146,10 @@
                 <!-- <a href="http://www.youngvoice.tw"> -->
                   <img src="img/website.png" style="float:right;" /></a>
               </div>
-              <div class="introDialogue">
+              <div class="introDialogue" style="margin-top:10%">
                 
                  <div class="introTextWrapper">  
-                <p class="introText">「青少年發聲網」希望支持與陪伴青少年朋友以自己熟悉的媒介，透過創作的過程找到自己的聲音、說自己說的話。歡迎更多有興趣的青少年朋友一起加入我們視覺影像的世界。</p>       
+                <p class="ContentFont introText">「青少年發聲網」希望支持與陪伴青少年朋友以自己熟悉的媒介，透過創作的過程找到自己的聲音、說自己說的話。歡迎更多有興趣的青少年朋友一起加入我們視覺影像的世界。</p>       
                 </div>  
                 <img class="introTitle" src="img/team.png"/>   
                 <img src="img/frame-intro-10.png" class="intro_left_bottom_corner"/>
@@ -161,7 +158,7 @@
                 <div class="intro_right_border"></div>
                 <div class="intro_bottom_border"></div>
               </div>
-              <div class="Center uiButton iknowButton objMargin" id="iknow_button" onClick="onClickIknow()"></div>
+              <div class="Center uiButton iknowButton" id="iknow_button" onClick="onClickIknow()"></div>
             </div>
           </div>
         </div>
@@ -174,22 +171,34 @@
        
   </div>
 
-  <!-- <audio id="sound_back" src="sound/back.wav" preload="auto"></audio> -->
-  <!-- <script src="js/test.js"></script> -->
-   <script src="js/snake.js"></script>
+   
    <script>
     setupPixi(); 
     loadPreElement();
   </script>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80306203-6"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+ <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-24296184-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    gtag('config', 'UA-80306203-6');
-  </script>
+  gtag('config', 'UA-24296184-2');
+</script>
+
 </body>
+
+<!--
+$$\      $$\ $$\      $$\ $$\        $$$$$$\  $$$$$$$\  
+$$$\    $$$ |$$$\    $$$ |$$ |      $$  __$$\ $$  __$$\ 
+$$$$\  $$$$ |$$$$\  $$$$ |$$ |      $$ /  $$ |$$ |  $$ |
+$$\$$\$$ $$ |$$\$$\$$ $$ |$$ |      $$$$$$$$ |$$$$$$$\ |
+$$ \$$$  $$ |$$ \$$$  $$ |$$ |      $$  __$$ |$$  __$$\ 
+$$ |\$  /$$ |$$ |\$  /$$ |$$ |      $$ |  $$ |$$ |  $$ |
+$$ | \_/ $$ |$$ | \_/ $$ |$$$$$$$$\ $$ |  $$ |$$$$$$$  |
+\__|     \__|\__|     \__|\________|\__|  \__|\_______/       
+-->
+
+
 </html>

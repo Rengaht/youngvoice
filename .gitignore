@@ -1,7 +1,15 @@
 *.png
 *.JPG
 *.wav
+<<<<<<< HEAD
 
 *.sql
 node_modules/
 *.csv
+=======
+*.csv
+*.sql
+>>>>>>> origin/master
+
+*.rar
+*.ttf
