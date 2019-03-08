@@ -2,6 +2,7 @@
 *.JPG
 *.wav
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 *.sql
 node_modules/
@@ -13,3 +14,7 @@ node_modules/
 
 *.rar
 *.ttf
+=======
+*.csv
+*.sql
+>>>>>>> origin/master
