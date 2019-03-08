@@ -64,7 +64,6 @@ function randomKeyword(){
 	// while(key_.length<2){
 	// 	key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
 	// }
-
 	// try{
 		var type_=list_connection[_index_connection]["type"];
 
@@ -85,8 +84,6 @@ function randomKeyword(){
 }
 function randomConnection(){
 
-
-
 	_index_connection++;
 	if(_index_connection>=list_connection.length){
 		_index_connection=0;
@@ -94,14 +91,12 @@ function randomConnection(){
 
 	var cnn=list_connection[_index_connection]["word"];
 
-
 	return cnn;
 }
 
 function renderImage(onFinish){
 
 	// var minx=wwid,miny=whei;
-
 	// var s_=_container_snake.children;
 	// for(var k in s_){
 	// 	var tx=s_[k].getChildAt(0).x;
@@ -144,7 +139,6 @@ function renderImage(onFinish){
 function uploadImage(){
 
 	_container_tmp.visible=true;
-
 
 	// app.stage.removeChild(_container_game);	
 	if(_output_container===null) _output_container=new Container();
@@ -212,8 +206,7 @@ function uploadImage(){
 	    });
 	}, 'image/png');
 
-
-
+	
 
 }
 function shareImage(url_){
@@ -252,7 +245,7 @@ function getSample(){
         processData: false,
         contentType: false,
         success: function(data) {
-            console.log(data);
+            // console.log(data);
             setSampleText(data);
         },
         error: function(response) {
