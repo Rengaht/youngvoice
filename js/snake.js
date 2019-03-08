@@ -30,6 +30,7 @@ var pre_mgridx,pre_mgridy;
 var mgridx,mgridy;
 var _orientation;
 
+
 function setupPixi(){
 
   Container = PIXI.Container;
@@ -69,7 +70,6 @@ function setupPixi(){
 
   
 
-
 }
 
 var _resizing;
@@ -80,7 +80,6 @@ function resize(){
 
 function doResize(){
 
-
   // var ww_=$(window).width();
   // var wh_=$(window).height();
   
@@ -90,7 +89,6 @@ function doResize(){
   var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
   var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   console.log('window size:'+ww_+' x '+wh_);
-
 
   var tmpw_=ww_*.99;
   var tmph_=wh_*.99;
@@ -107,6 +105,7 @@ function doResize(){
   $('#outer_frame').css('top',(wh_/2-(tmph_+tt+23)/2)+'px');
 
   $('#inner_frame').css('min-height',tmph_+'px');
+
 
   app.stage.removeChild(_container_game);
 
@@ -141,7 +140,6 @@ function doResize(){
   console.log(mgridx+' '+(wwid-gwid*mgridx)+' x '+mgridy+' '+(whei-gwid*mgridy));
   
   resetGrid();
-
 
   if(_orientation&&new_orient!=_orientation){
       rotateSnake();

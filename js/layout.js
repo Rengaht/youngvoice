@@ -46,9 +46,7 @@ function loadGame(){
   });
 
 
-
 }
-
 
 var id_loading_font;
 function loadFont(){
@@ -75,7 +73,6 @@ function loadFontFinish(){
 }
 
 
-
 function setup(){
 
   showStart();
@@ -85,7 +82,7 @@ function setup(){
   _container_game=new PIXI.Container();
   _container_game.visible=true;
 
-  // let mask_=new PIXI.Sprite(Texture.WHITE);
+  // var mask_=new PIXI.Sprite(Texture.WHITE);
   // mask_.width=wwid-FRAME_BORDER;
   // mask_.height=whei-FRAME_BORDER;
   // _container_game.addChild(mask_);
@@ -132,8 +129,6 @@ function resetGrid(){
       _graphics_grid.endFill();
     }
   }
-
-
 
   app.stage.addChild(_container_game);
 

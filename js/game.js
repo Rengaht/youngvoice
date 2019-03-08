@@ -151,13 +151,13 @@ function updateSnake(delta){
 	// len=_body.length;
 	for(var i=0;i<_body.length;++i){
 		if(i==_body.length-1){
-			setSnakeHead(_container_snake.children[i],_body[i],ang);
+			setSnakeHead(_container_snake.children[i],_body[i],ang,false);
 			setSnakeHead(_container_shadow.children[i],_body[i],ang,true);		
 		}else if(i!=0){
-			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i));
+			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i),false);
 			setSnakeBody(_container_shadow.children[i],_body[i],calBodyDirection(i),true);
 		}else{
-			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection());
+			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection(),false);
 			setSnakeTail(_container_shadow.children[i],_body[i],calTailDirection(),true);		
 		} 
 	}	
@@ -294,11 +294,7 @@ function setupSnake(){
 			glow.mask=mask_;
 
 
-			app.ticker.add(function(){
-				var w=glow.parent.children[0].width;
-				glow.x=(glow.x+3*Math.abs(Math.sin(app.ticker.lastTime)));
-				if(glow.x>w) glow.x=-w;
-			});
+			app.ticker.add(makeGlower(glow));
 			fc.addChild(glow);
 
 	  		_container_food.addChild(fc);
@@ -312,15 +308,19 @@ function setupSnake(){
 		}
 
 	});
-
-	
-	
-
-	
 	
 
 	_container_game.visible=false;
 }
+function makeGlower(glow){
+	return function(){
+				var w=glow.parent.children[0].width;
+				glow.x=(glow.x+3*Math.abs(Math.sin(app.ticker.lastTime)));
+				if(glow.x>w) glow.x=-w;
+			};
+}
+
+
 function resetBodyPos(len){
 
   _vel=!(_orientation==='landscape')?'up':'left';
@@ -376,7 +376,7 @@ function resetSnake(sentence_){
   shead_container.addChild(shead);
   head_container.addChild(head);
 
-  setSnakeHead(head_container,_body[0],(_orientation==='landscape')?0:90);
+  setSnakeHead(head_container,_body[0],(_orientation==='landscape')?0:90,false);
   setSnakeHead(shead_container,_body[0],(_orientation==='landscape')?0:90,true);
   
   _container_snake.addChild(head_container);
@@ -407,7 +407,7 @@ function resetSnake(sentence_){
   	scontainer_.addChild(s_);
   	container_.addChild(b_);
   	container_.addChild(text_);
-  	setSnakeBody(container_,_body[i+1],calBodyDirection(i+1));
+  	setSnakeBody(container_,_body[i+1],calBodyDirection(i+1),false);
   	setSnakeBody(scontainer_,_body[i+1],calBodyDirection(i+1),true);
 
 
@@ -431,7 +431,7 @@ function resetSnake(sentence_){
   
   stail_container.addChild(stail);
   tail_container.addChild(tail);
-  setSnakeTail(tail_container,_body[len-1],(_orientation==='landscape')?180:-90);
+  setSnakeTail(tail_container,_body[len-1],(_orientation==='landscape')?180:-90,false);
   setSnakeTail(stail_container,_body[len-1],(_orientation==='landscape')?180:-90,true);
   
   _container_snake.addChild(tail_container);
@@ -443,7 +443,7 @@ function resetSnake(sentence_){
 
 }
 
-function setSnakeHead(container_,pt,angle,isshadow=false){
+function setSnakeHead(container_,pt,angle,isshadow){
   // for(var i in container_.children){
 	  var sprite_=container_.children[0];
 	  sprite_.angle=angle;
@@ -452,7 +452,7 @@ function setSnakeHead(container_,pt,angle,isshadow=false){
 	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?SHADOW_OFFSET:0);
   // }
 }
-function setSnakeBody(container_,pt,direction,isshadow=false){
+function setSnakeBody(container_,pt,direction,isshadow){
 
 	try{
 	var sprite_=container_.children[0];
@@ -492,7 +492,7 @@ function setSnakeBody(container_,pt,direction,isshadow=false){
   	console.log(err);
   }
 }
-function setSnakeTail(container_,pt,angle,isshadow=false){
+function setSnakeTail(container_,pt,angle,isshadow){
   // for(var i in container_.children){
 	  var sprite_=container_.children[0];
 	  	
@@ -555,7 +555,7 @@ function checkSnakePos(){
 		    		var wr={text:word_add[k],key:k<klen};
 		    		if(_word_eaten.length==0 && k==0){
 		    			appendTail(wr);
-		    			console.log("add tail now: "+wr);
+		    			// console.log("add tail now: "+wr);
 		    		}else 
 		    			_word_eaten.push(wr);
 		    	}
@@ -911,13 +911,13 @@ function rotateSnake(){
 	for(var i=0;i<_body.length;++i){	
 		if(i==_body.length-1){
 			var ang=(_orientation==='landscape')?90:0;
-			setSnakeHead(_container_snake.children[i],_body[i],ang);
+			setSnakeHead(_container_snake.children[i],_body[i],ang,false);
 			setSnakeHead(_container_shadow.children[i],_body[i],ang,true);		
 		}else if(i!=0){
-			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i));
+			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i),false);
 			setSnakeBody(_container_shadow.children[i],_body[i],calBodyDirection(i),true);
 		}else{
-			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection());
+			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection(),false);
 			setSnakeTail(_container_shadow.children[i],_body[i],calTailDirection(),true);		
 		} 
 	}	
