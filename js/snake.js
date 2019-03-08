@@ -16,11 +16,7 @@ var MIN_GRID=10;
 var MAX_GRID=18;
 
 var offsetx,offsety;
-<<<<<<< HEAD
 var gwid=60;
-=======
-let gwid=60;
->>>>>>> origin/master
 
 var button_scale;
 var text_margin=FRAME_BORDER*2;
@@ -30,13 +26,9 @@ var landscape;
 var _title_hei;
 
 var pre_wid,pre_hei;
-<<<<<<< HEAD
 var pre_mgridx,pre_mgridy;
 var mgridx,mgridy;
 var _orientation;
-=======
->>>>>>> origin/master
-
 
 function setupPixi(){
 
@@ -72,16 +64,12 @@ function setupPixi(){
 
   // _orientation=(wwid>whei)?'landscape':'portrait';
   window.addEventListener('resize', resize);
-<<<<<<< HEAD
-=======
-  doResize();
->>>>>>> origin/master
 
   doResize();
 
   
 
-<<<<<<< HEAD
+
 }
 
 var _resizing;
@@ -91,27 +79,7 @@ function resize(){
 }
 
 function doResize(){
-=======
-var _resizing;
-function resize(){
-  clearTimeout(_resizing);
-  _resizing=setTimeout(doResize, 100);
-}
 
-function doResize(){
-
-  app.stage.removeChild(_container_game);
-
-  // const parent = app.view.parentNode;
-  const parent=document.getElementsByClassName('innerFrame')[0];
-  app.renderer.resize(parent.clientWidth, parent.clientHeight);
-  // rect.position.set(app.screen.width, app.screen.height);
-  // app.renderer.view.style.width=parent.clientWidth+'px';
-  // app.renderer.view.style.height=parent.clientHeight+'px';
-
-  pre_wid=wwid;
-  pre_hei=whei;
->>>>>>> origin/master
 
   // var ww_=$(window).width();
   // var wh_=$(window).height();
@@ -123,7 +91,7 @@ function doResize(){
   var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   console.log('window size:'+ww_+' x '+wh_);
 
-<<<<<<< HEAD
+
   var tmpw_=ww_*.99;
   var tmph_=wh_*.99;
 
@@ -139,13 +107,7 @@ function doResize(){
   $('#outer_frame').css('top',(wh_/2-(tmph_+tt+23)/2)+'px');
 
   $('#inner_frame').css('min-height',tmph_+'px');
-=======
-  offsetx=FRAME_BORDER;
-  offsety=FRAME_BORDER/2;
->>>>>>> origin/master
 
-
-<<<<<<< HEAD
   app.stage.removeChild(_container_game);
 
   // const parent = app.view.parentNode;
@@ -179,13 +141,7 @@ function doResize(){
   console.log(mgridx+' '+(wwid-gwid*mgridx)+' x '+mgridy+' '+(whei-gwid*mgridy));
   
   resetGrid();
-=======
-  console.log(mgridx+' '+(wwid-gwid*mgridx)+' x '+mgridy+' '+(whei-gwid*mgridy));
-  
-  resetGrid();
 
-}
->>>>>>> origin/master
 
   if(_orientation&&new_orient!=_orientation){
       rotateSnake();

@@ -1,8 +1,6 @@
-<<<<<<< HEAD
+
 var FONT_STRETCH=.7;
-=======
-let FONT_STRETCH=.7;
->>>>>>> origin/master
+
 var RunnerText=[['01','01','03','04','05','06','07','33','17','18','08','09','10','03','12','13','14'],
 				['15','16','19','20','21','22','23','24','33','25','26','27','28','33','29','29','31','31']];
 var _runner_sentence_index=0;
@@ -11,11 +9,8 @@ var _runner_word_index=0;
 var app_runner;
 var _textrunner;
 function setupRunner(){
-<<<<<<< HEAD
 	var twid=500;
-=======
-	let twid=500;
->>>>>>> origin/master
+
   app_runner=new PIXI.Application({
   	width:twid,
   	height:100,
@@ -37,7 +32,7 @@ function setupRunner(){
   _textrunner.x=0;
 
   for(var i in RunnerText){
-<<<<<<< HEAD
+
 	var ct_=new PIXI.Container();
 	if(i!=_runner_sentence_index) ct_.visible=false;
 
@@ -47,16 +42,7 @@ function setupRunner(){
 		// console.log(text_.width+' x '+text_.height);
 		var key_=new PIXI.Sprite(text_);
 
-=======
-	let ct_=new PIXI.Container();
-	if(i!=_runner_sentence_index) ct_.visible=false;
 
-	let x_=0;
-	for(var j in RunnerText[i]){
-		let text_=new Texture.from('img/textrunner/text-'+RunnerText[i][j]+'.png');
-		// console.log(text_.width+' x '+text_.height);
-		let key_=new PIXI.Sprite(text_);
->>>>>>> origin/master
 		key_.scale.set(FONT_STRETCH,1);
 		key_.x=x_;
 		key_.y=0;
@@ -94,11 +80,9 @@ function drawTextRunner(delta){
     	fontWeight:'bold'
 	});
 
-<<<<<<< HEAD
+
 	var total_=_textrunner.children[_runner_sentence_index].children.length;	
-=======
-	let total_=_textrunner.children[_runner_sentence_index].children.length;	
->>>>>>> origin/master
+
 	for(var i=0;i<total_;++i){
 		var now_=Math.floor(_runner_word_index);
 		

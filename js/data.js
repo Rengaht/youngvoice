@@ -4,11 +4,7 @@ var DATA_URL="";
 var SQL_URL="https://game.youngvoice.tw/";
 
 var list_sentence,list_keyword,list_connection;
-<<<<<<< HEAD
 var _index_keyword={};
-=======
-var _index_keyword=0;
->>>>>>> origin/master
 var _index_connection=0;
 
 var _sentence='';
@@ -19,7 +15,6 @@ var _snake_crop=null;
 var _output_container=null;
 
 function loadData(){
-<<<<<<< HEAD
 
 	$.getJSON(DATA_URL+"data/sentence.json",function(json){
 		list_sentence=json.start;
@@ -33,11 +28,6 @@ function loadData(){
 	// list_sentence=loader.resources['data/sentence.json'].data.start;
 	// list_connection=loader.resources['data/sentence.json'].data.connect;
 	// list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
-=======
-	list_sentence=loader.resources['data/sentence.json'].data.start;
-	list_connection=loader.resources['data/sentence.json'].data.connect;
-	list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
->>>>>>> origin/master
 
 }
 
@@ -74,7 +64,6 @@ function randomKeyword(){
 	// while(key_.length<2){
 	// 	key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
 	// }
-<<<<<<< HEAD
 
 	// try{
 		var type_=list_connection[_index_connection]["type"];
@@ -96,43 +85,23 @@ function randomKeyword(){
 }
 function randomConnection(){
 
-=======
-	let key_=list_keyword[_index_keyword];
-	_index_keyword++;
-	while(key_.length<2){
-		key_=list_keyword[_index_keyword];
-		_index_keyword++;
-	}
 
-	if(_index_keyword>=list_keyword.length){
-		_index_keyword=0;
-		list_keyword=shuffle(list_keyword);
-	}
-
-	return key_;
-}
-function randomConnection(){
-
-	let cnn=list_connection[_index_connection];
->>>>>>> origin/master
 
 	_index_connection++;
 	if(_index_connection>=list_connection.length){
 		_index_connection=0;
 	}
 
-<<<<<<< HEAD
 	var cnn=list_connection[_index_connection]["word"];
 
-=======
->>>>>>> origin/master
+
 	return cnn;
 }
 
 function renderImage(onFinish){
 
 	// var minx=wwid,miny=whei;
-<<<<<<< HEAD
+
 	// var s_=_container_snake.children;
 	// for(var k in s_){
 	// 	var tx=s_[k].getChildAt(0).x;
@@ -175,44 +144,6 @@ function renderImage(onFinish){
 function uploadImage(){
 
 	_container_tmp.visible=true;
-=======
-	// let s_=_container_snake.children;
-	// for(var k in s_){
-	// 	let tx=s_[k].getChildAt(0).x;
-	// 	let ty=s_[k].getChildAt(0).y;
-	// 	if(tx<minx) minx=tx;
-	// 	if(ty<miny) miny=ty;
-	// }
-	var minx=mgridx,miny=mgridy;
-	//
-	for(var k in _body){
-		let tx=_body[k].x;
-		let ty=_body[k].y;
-		if(tx<minx) minx=tx;
-		if(ty<miny) miny=ty;
-	}
-	minx*=gwid;
-	miny*=gwid;
-
-	
-	let s_=_container_snake.children;
-	for(var k in s_){
-		s_[k].x-=minx;
-		s_[k].y-=miny;
-	}
-	let ss_=_container_shadow.children;
-	for(var k in ss_){
-		ss_[k].x-=minx;
-		ss_[k].y-=miny;
-	}
-
-// let tmp_=new Sprite(resources['img/logo.png'].texture);
-// tmp_.y=100;
-// _container_tmp.addChild(tmp_);
-	app.renderer.render(_container_tmp);
-	let url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
-	document.getElementById('dead_snake').src=url_;
->>>>>>> origin/master
 
 
 	// app.stage.removeChild(_container_game);	
@@ -282,24 +213,7 @@ function uploadImage(){
 	}, 'image/png');
 
 
-<<<<<<< HEAD
-=======
-	// formData.append('keyword','test');
-	$.ajax({
-        type: 'POST',
-        url: 'upload/action.php',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            console.log(data);
-            shareImage(data.url);
-        },
-        error: function(response) {
-            console.log(response.responseText);
-        }
-    });
->>>>>>> origin/master
+
 
 }
 function shareImage(url_){
