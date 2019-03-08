@@ -1,9 +1,19 @@
-
+@import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
 @font-face {
 	font-family: 'IntroFont';
 	src:url("../font/PingFang Bold.ttf");
 }
 
+.ContentFont{
+	font-family:'Noto Sans TC';
+	line-height: 1.8;
+	font-weight: 500;
+}
+.TitleFont{
+	font-family:'Noto Sans TC';
+	line-height: 1.8;
+	font-weight: 800;
+}
 *{
   padding:0px; margin: 0px
 }
@@ -75,6 +85,10 @@ body{
 	border-right: 5px solid #122C9A;	
 	border-left: 5px solid #122C9A;	
 	position: relative;
+<<<<<<< HEAD
+	margin-right: -5px;
+=======
+>>>>>>> origin/master
     /*top: -7.5px;*/
 }
 
@@ -107,7 +121,11 @@ body{
 	top:10px;
 	left:10px;
 	bottom:15px;
+<<<<<<< HEAD
 	right:5px;
+=======
+	right:20px;
+>>>>>>> origin/master
 }
 .overlapFrame{
 	/*background-color:white;*/
@@ -123,9 +141,20 @@ body{
 	opacity: 1;
 	transition: .3s ease-out;
 }
+<<<<<<< HEAD
 .overlapFrame.hidden{
 	opacity: 0;
 	transition: .3s ease-out;
+=======
+
+#title_logo{
+	position:absolute;
+	width:auto;
+	cursor: pointer;
+/*	top:10px;
+	left:10px;*/
+	/*height:80%;*/
+>>>>>>> origin/master
 }
 
 
@@ -169,6 +198,8 @@ body{
 	position:absolute;
 	width:auto;
 	cursor: pointer;
+	left:20px;
+	top:5px;
 
 }
 .noLeftBorder{
@@ -206,8 +237,47 @@ canvas{
 }
 
 .objMargin{
-	margin-top:40px;
+	margin-top:10%;
 }
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 31px;
+ 
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+ background: #FCEB74;
+  border-left:5px solid #122C9A;
+  border-right:5px solid #122C9A;
+  /* background-image: url("../img/scrollbar-thumb.png");*/
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /*background: #888; */
+ background: rgb(96,51,255); 
+
+  border:5px solid #122C9A;
+}
+<<<<<<< HEAD
+::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+/*    background-image: url("../img/scrollbar-up.png");
+  background-position: : center;
+  width:21px;
+  height:36px;
+    border-left:5px solid #122C9A;
+    border-right:5px solid #122C9A;*/
+}
+
+/*::-webkit-scrollbar-button:single-button:vertical:increment{
+	 background-image: url("../img/scrollbar-down.png");
+}*/
+=======
 
 
 /* width */
@@ -242,3 +312,4 @@ canvas{
 ::-webkit-scrollbar-button:single-button:vertical:increment{
 	 background-image: url("../img/scrollbar-down.png");
 }
+>>>>>>> origin/master

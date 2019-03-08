@@ -1,5 +1,11 @@
 {"patterns":[
 	{
+		"img":"food/1.png",
+		"mask":"food/mask-1.png",
+		"mword":1,
+		"pattern":[{"x":0,"y":0}]
+	},
+	{
 		"img":"food/2-1.png",
 		"mask":"food/mask-2-1.png",
 		"mword":2,

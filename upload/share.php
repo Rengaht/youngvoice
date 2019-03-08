@@ -1,6 +1,6 @@
 
 <?php
-	$host='https://mmlab.com.tw/project/youngvoice/';
+	$host='https://game.youngvoice.tw/';
 	$page_url=$host;	
 	// echo $page_url;
 	$img_url=$host.'upload/output/'.$_GET['id'].'.png';	

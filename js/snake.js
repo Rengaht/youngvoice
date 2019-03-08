@@ -12,20 +12,30 @@ var _container_game;
 var _sample_content,_sample_title_text,_recommand_back;
 var _graphics_grid=null;
 
-let MIN_GRID=10;
-let MAX_GRID=18;
+var MIN_GRID=10;
+var MAX_GRID=18;
 
 var offsetx,offsety;
+<<<<<<< HEAD
+var gwid=60;
+=======
 let gwid=60;
+>>>>>>> origin/master
 
 var button_scale;
-let text_margin=FRAME_BORDER*2;
+var text_margin=FRAME_BORDER*2;
 
 var marginx,marginy;
 var landscape;
 var _title_hei;
 
 var pre_wid,pre_hei;
+<<<<<<< HEAD
+var pre_mgridx,pre_mgridy;
+var mgridx,mgridy;
+var _orientation;
+=======
+>>>>>>> origin/master
 
 
 function setupPixi(){
@@ -60,11 +70,18 @@ function setupPixi(){
   whei=app.screen.height;
   FRAME_BORDER=5;
 
+  // _orientation=(wwid>whei)?'landscape':'portrait';
   window.addEventListener('resize', resize);
+<<<<<<< HEAD
+=======
+  doResize();
+>>>>>>> origin/master
+
   doResize();
 
   
 
+<<<<<<< HEAD
 }
 
 var _resizing;
@@ -74,16 +91,45 @@ function resize(){
 }
 
 function doResize(){
+=======
+var _resizing;
+function resize(){
+  clearTimeout(_resizing);
+  _resizing=setTimeout(doResize, 100);
+}
 
-  let ww_=$(window).width();
-  let wh_=$(window).height();
+function doResize(){
 
-  let tmpw_=ww_*.99;
-  let tmph_=wh_*.99;
+  app.stage.removeChild(_container_game);
 
-  let tt=$('#frame_title').height();
-  let innerw=tmpw_-5-13;
-  let innerh=tmph_-tt-10-13;
+  // const parent = app.view.parentNode;
+  const parent=document.getElementsByClassName('innerFrame')[0];
+  app.renderer.resize(parent.clientWidth, parent.clientHeight);
+  // rect.position.set(app.screen.width, app.screen.height);
+  // app.renderer.view.style.width=parent.clientWidth+'px';
+  // app.renderer.view.style.height=parent.clientHeight+'px';
+
+  pre_wid=wwid;
+  pre_hei=whei;
+>>>>>>> origin/master
+
+  // var ww_=$(window).width();
+  // var wh_=$(window).height();
+  
+  // alert(new_orient);
+ 
+
+  var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
+  var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  console.log('window size:'+ww_+' x '+wh_);
+
+<<<<<<< HEAD
+  var tmpw_=ww_*.99;
+  var tmph_=wh_*.99;
+
+  var tt=$('#frame_title').height();
+  var innerw=tmpw_-5-13;
+  var innerh=tmph_-tt-10-13;
 
   tmpw_=Math.floor(innerw/60)*60;
   tmph_=Math.floor(innerh/60)*60;
@@ -93,8 +139,13 @@ function doResize(){
   $('#outer_frame').css('top',(wh_/2-(tmph_+tt+23)/2)+'px');
 
   $('#inner_frame').css('min-height',tmph_+'px');
+=======
+  offsetx=FRAME_BORDER;
+  offsety=FRAME_BORDER/2;
+>>>>>>> origin/master
 
 
+<<<<<<< HEAD
   app.stage.removeChild(_container_game);
 
   // const parent = app.view.parentNode;
@@ -111,10 +162,16 @@ function doResize(){
   whei=tmph_;
   console.log('reset size:'+wwid+' x '+whei);
 
-  landscape=(wwid>whei);
+  // landscape=(wwid>whei);
+
+  var new_orient=(wwid>whei)?'landscape':'portrait';
+  // alert(new_orient);
 
   offsetx=FRAME_BORDER;
   offsety=FRAME_BORDER/2;
+
+  pre_mgridx=mgridx;
+  pre_mgridy=mgridy;
 
   mgridx=Math.floor((wwid)/gwid);
   mgridy=Math.floor((whei)/gwid);
@@ -122,6 +179,19 @@ function doResize(){
   console.log(mgridx+' '+(wwid-gwid*mgridx)+' x '+mgridy+' '+(whei-gwid*mgridy));
   
   resetGrid();
+=======
+  console.log(mgridx+' '+(wwid-gwid*mgridx)+' x '+mgridy+' '+(whei-gwid*mgridy));
+  
+  resetGrid();
+
+}
+>>>>>>> origin/master
+
+  if(_orientation&&new_orient!=_orientation){
+      rotateSnake();
+      resetFoodPos();
+  } 
+  _orientation=new_orient;
 
 }
 
@@ -141,10 +211,10 @@ function loadProgressHandler(loader,resource){
 
 }
 function setLoadingProgress(){
-  let dest_len=297;
-  let src_len=20;
+  var dest_len=297;
+  var src_len=20;
 
-  let current_len=(dest_len-src_len)/100*loading_progress+src_len;
+  var current_len=(dest_len-src_len)/100*loading_progress+src_len;
 
   $('#loading_snake_body').css('width',current_len);
   $('#loading_snake_head').css('left',current_len+33);

@@ -1,7 +1,24 @@
+<<<<<<< HEAD
+var SNAKE_VEL_MIN=32;
+var SNAKE_VEL_MID=24;
+var SNAKE_VEL_MAX=8;
+var SNAKE_ACCELERATE=3;
+
+var TAIL_APPEND_TIME=500;
+
+var TRANSITION_TIME=1500;
+var GG_TRANSITION_TIME=3000;
+var SNAKE_FONT_SIZE=40;
+var SHADOW_OFFSET=5;
+var START_TIMEOUT=500;
+var FOOD_RESET_TIME=400;
+
+var NEAR_FOOD_THRESHOLD=3;
+=======
 let SNAKE_VEL_MIN=32;
-let SNAKE_VEL_MID=24;
-let SNAKE_VEL_MAX=8;
-let SNAKE_ACCELERATE=3;
+let SNAKE_VEL_MID=20;
+let SNAKE_VEL_MAX=12;
+let SNAKE_ACCELERATE=1;
 
 let TAIL_APPEND_TIME=500;
 
@@ -10,9 +27,9 @@ let GG_TRANSITION_TIME=3000;
 let SNAKE_FONT_SIZE=40;
 let SHADOW_OFFSET=5;
 let START_TIMEOUT=500;
-let FOOD_RESET_TIME=400;
 
 let NEAR_FOOD_THRESHOLD=3;
+>>>>>>> origin/master
 
 
 var snake_scale;
@@ -47,27 +64,50 @@ var _pre_shadow_pos={};
 
 function resetGame(){
 
+<<<<<<< HEAD
+	shuffle(list_keyword["noun"]);
+	shuffle(list_keyword["verb"]);
+	shuffle(list_keyword["adj"]);
+	
+	_index_keyword["noun"]=0;
+	_index_keyword["verb"]=0;
+	_index_keyword["adj"]=0;
+
+	// _container_hint.visible=true;
+	// $('#hint_frame').css("display","block");
+	_index_connection=0;
+=======
 	shuffle(list_keyword);
 	_index_keyword=0;
 
 	// _container_hint.visible=true;
-	// $('#hint_frame').css("display","block");
+	_frame_hint.style.display="block";
+>>>>>>> origin/master
 
-	resetSnake(randomSentence());
+	var ss=randomSentence()+list_connection[_index_connection]["word"];
+	resetSnake(ss);
 	resetFood();
+<<<<<<< HEAD
+=======
+	app.ticker.add(updateSnake);
+>>>>>>> origin/master
 
 	_snake_vel=SNAKE_VEL_MIN;
 
 	_keyword=[];
 	_word_eaten=[];
-	_index_connection=0;
+<<<<<<< HEAD
 	
+
 	resetSampleText();
-	document.getElementById('dead_snake').src='';
+	$('#dead_wrapper').css('background-image','');
+=======
+>>>>>>> origin/master
 }
 function startGame(){
 
 	// _container_hint.visible=false;
+<<<<<<< HEAD
 	$('#hint_frame').css("display","none");;
 	_last_ms=0;
 	_last_append=0;
@@ -75,6 +115,12 @@ function startGame(){
 
 	app.ticker.add(updateSnake);
 
+=======
+	_frame_hint.style.display="none";
+	_last_ms=0;
+	_last_append=0;
+
+>>>>>>> origin/master
 	snake_stop=false;
 	if(_food.length<1) resetFood();
 	
@@ -103,17 +149,25 @@ function updateSnake(delta){
 	else return;
 
 
+<<<<<<< HEAD
 	
 	
 	if(_word_eaten.length>0){
+		var tword=_word_eaten.shift();
+=======
+	_snake_vel-=_snake_vel<SNAKE_VEL_MID?SNAKE_ACCELERATE/2:SNAKE_ACCELERATE;
+	if(_snake_vel<SNAKE_VEL_MAX) _snake_vel=SNAKE_VEL_MAX;
+	
+	if(_word_eaten.length>0){
 		let tword=_word_eaten.shift();
+>>>>>>> origin/master
 		appendTail(tword);
 	}
 	
 
 
 	var pos={x:0,y:0};
-	let len=_body.length;
+	var len=_body.length;
 	
 	pos.x=_body[len-1].x;
 	pos.y=_body[len-1].y;
@@ -133,7 +187,7 @@ function updateSnake(delta){
 	}else{
 		//len=_body.length;
 		for(var i=_body.length-2;i>=0;--i){
-			let newpos={x:_body[i].x,y:_body[i].y};
+			var newpos={x:_body[i].x,y:_body[i].y};
 			_body[i].x=pos.x;
 			_body[i].y=pos.y;
 			
@@ -144,13 +198,13 @@ function updateSnake(delta){
 	// len=_body.length;
 	for(var i=0;i<_body.length;++i){
 		if(i==_body.length-1){
-			setSnakeHead(_container_snake.children[i],_body[i],ang);
+			setSnakeHead(_container_snake.children[i],_body[i],ang,false);
 			setSnakeHead(_container_shadow.children[i],_body[i],ang,true);		
 		}else if(i!=0){
-			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i));
+			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i),false);
 			setSnakeBody(_container_shadow.children[i],_body[i],calBodyDirection(i),true);
 		}else{
-			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection());
+			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection(),false);
 			setSnakeTail(_container_shadow.children[i],_body[i],calTailDirection(),true);		
 		} 
 	}	
@@ -207,7 +261,11 @@ function setupSnake(){
 		}
 
 
+<<<<<<< HEAD
 		if($('#hint_frame').css("display")==="block"){
+=======
+		if(_frame_hint.style.display==="block"){
+>>>>>>> origin/master
 			startGame();
 			return;			
 		}
@@ -223,9 +281,9 @@ function setupSnake(){
         }
 	});
 
-	let canvas_=document.getElementById('pixi_frame');
-	let hammer=new Hammer.Manager(canvas_);
-	let swipe_=new Hammer.Swipe({
+	var canvas_=document.getElementById('pixi_frame');
+	var hammer=new Hammer.Manager(canvas_);
+	var swipe_=new Hammer.Swipe({
 		threshold:8,
 		velocity:.2
 	});
@@ -244,18 +302,31 @@ function setupSnake(){
 		if(_last_vel!=='up') _vel='down';        
 	});
 	
+<<<<<<< HEAD
+=======
+
+	_food_data=loader.resources['data/food_pattern.json'].data.patterns;
+	let flen=_food_data.length;
+	for(var i=0;i<flen;++i){
+		//_img_food.push(new Texture.from('img/'+_food_data[i].img));
+		_food_data[i]['texture']=new Texture.from('img/'+_food_data[i].img);
+	}
+	_food_scale=gwid/60;
+	
+
+>>>>>>> origin/master
 	_snake_text_style = new PIXI.TextStyle({
     	fontFamily: 'IntroFont',
     	fontSize: gwid/60*SNAKE_FONT_SIZE,
-    	fill:0x122C9A,
-    	// letterSpacing:2,
+    	fill:0x122C9A
+    	// varterSpacing:2,
     	// fontWeight:'bold'
 	});
 	_eaten_text_style = new PIXI.TextStyle({
     	fontFamily: 'IntroFont',
     	fontSize: gwid/60*SNAKE_FONT_SIZE,
-    	fill:0xFFFFFF,
-    	// letterSpacing:2,
+    	fill:0xFFFFFF
+    	// varterSpacing:2,
     	// fontWeight:'bold'
 	});
 
@@ -263,7 +334,7 @@ function setupSnake(){
 	//_food_data=loader.resources['data/food_pattern.json'].data.patterns;
 	$.getJSON(DATA_URL+"data/food_pattern.json",function(json){
 		_food_data=json.patterns;
-		let flen=_food_data.length;
+		var flen=_food_data.length;
 		for(var i=0;i<flen;++i){
 			//_img_food.push(new Texture.from('img/'+_food_data[i].img));
 			_food_data[i]['texture']=new Texture.from('img/'+_food_data[i].img);
@@ -273,34 +344,54 @@ function setupSnake(){
 
 		for(var i=0;i<3;++i){
 		
-			let fd=getFoodOf(2);
-			let ff=new Sprite(fd.texture);
+			var fd=getFoodOf(2);
+			var ff=new Sprite(fd.texture);
 			ff.scale.set(_food_scale);
 	  		
-			let fc=new Container();
+			var fc=new Container();
 			fc.addChild(ff);
 
-			let glow=new Sprite(resources['img/food/glow.png'].texture);
-			let mask_=new PIXI.Sprite(fd.mask);
+			var glow=new Sprite(resources['img/food/glow.png'].texture);
+			var mask_=new PIXI.Sprite(fd.mask);
 			mask_.scale.set(_food_scale);
 			fc.addChild(mask_);
 			glow.mask=mask_;
 
 
 			app.ticker.add(function(){
-				let w=glow.parent.children[0].width;
+				var w=glow.parent.children[0].width;
 				glow.x=(glow.x+3*Math.abs(Math.sin(app.ticker.lastTime)));
 				if(glow.x>w) glow.x=-w;
 			});
 			fc.addChild(glow);
 
+<<<<<<< HEAD
 	  		_container_food.addChild(fc);
 
 
 
 	  		_food_pattern.push(fd);
+=======
+	// _container_hint=new Container();
+	// let back=new PIXI.NineSlicePlane(Texture.from('img/info_back.png'),60,50,120,60);
+	// back.width=wwid;
+	// back.height=whei;
+ //  	_container_hint.addChild(back);
 
-	  		let text_=new Container();
+ //  	let hint=new Sprite(resources[(_mobile?'img/hint-mobile.png':'img/hint-pc.png')].texture);
+ //  	hint.x=wwid/2-hint.width/2;
+ //  	hint.y=whei/2-hint.height/2;
+ //  	_container_hint.addChild(hint);
+
+ //  	_container_hint.interactive=true;
+ //  	_container_hint.on('pointerdown',function(){
+ //  		startGame();
+ //  	});
+
+ //  	_container_game.addChild(_container_hint);
+>>>>>>> origin/master
+
+	  		var text_=new Container();
 	  		_container_food.addChild(text_);
 		}
 
@@ -316,23 +407,23 @@ function setupSnake(){
 }
 function resetBodyPos(len){
 
-  _vel=!landscape?'up':'left';
-  _last_vel=!landscape?'down':'right';
+  _vel=!(_orientation==='landscape')?'up':'left';
+  _last_vel=!(_orientation==='landscape')?'down':'right';
 
   _body=[];
-  // let len=9;
+  // var len=9;
   len+=3;
   
 
   for(var i=0;i<len;++i){
-  	if(landscape){
-  		let startx=mgridx-(len-1);
-  		let starty=Math.floor(mgridy/2);
+  	if(_orientation==='landscape'){
+  		var startx=mgridx-(len-1);
+  		var starty=Math.floor(mgridy/2);
 
   		_body.push({x:startx+i,y:starty});
 	}else{
-		let startx=Math.floor(mgridx/2);
-  		let starty=mgridy-(len-1);
+		var startx=Math.floor(mgridx/2);
+  		var starty=mgridy-(len-1);
 		
 		_body.push({x:startx,y:starty+i});
 	}
@@ -350,10 +441,10 @@ function resetSnake(sentence_){
   _container_shadow.x=0;
   _container_shadow.y=0;
 
-  let head_container=new Container();
-  let shead_container=new Container();
-  let shead=new Sprite(_shadow_head[0]);
-  let head=new Sprite(_img_head[0]);
+  var head_container=new Container();
+  var shead_container=new Container();
+  var shead=new Sprite(_shadow_head[0]);
+  var head=new Sprite(_img_head[0]);
 
   snake_scale=gwid/(head.width/115*60);
   //gwid/60*5;
@@ -369,30 +460,30 @@ function resetSnake(sentence_){
   shead_container.addChild(shead);
   head_container.addChild(head);
 
-  setSnakeHead(head_container,_body[0],landscape?0:90);
-  setSnakeHead(shead_container,_body[0],landscape?0:90,true);
+  setSnakeHead(head_container,_body[0],(_orientation==='landscape')?0:90,false);
+  setSnakeHead(shead_container,_body[0],(_orientation==='landscape')?0:90,true);
   
   _container_snake.addChild(head_container);
   _container_shadow.addChild(shead_container);
   
   
-  let len=_body.length;
+  var len=_body.length;
 
   for(var i=0;i<len-2;++i){
-  	//let container_=new Container();
-  	let container_=new Container();
-  	let scontainer_=new Container();
+  	//var container_=new Container();
+  	var container_=new Container();
+  	var scontainer_=new Container();
   	
-  	let b_=new Sprite(_img_body[0]);
+  	var b_=new Sprite(_img_body[0]);
   	b_.scale.set(snake_scale,snake_scale);
   	b_._zIndex=0;
   	
-  	let s_=new Sprite(_shadow_body[0]);
+  	var s_=new Sprite(_shadow_body[0]);
   	s_.scale.set(snake_scale,snake_scale);
   	s_._zIndex=-10;
   	
-  	let tt=(i<sentence_.length)?sentence_[i]:'...';
-  	let text_=new PIXI.Text(tt,_snake_text_style);
+  	var tt=(i<sentence_.length)?sentence_[i]:'...';
+  	var text_=new PIXI.Text(tt,_snake_text_style);
   	text_.scale.set(FONT_STRETCH,1);
   	text_._zIndex=10;
 
@@ -400,7 +491,7 @@ function resetSnake(sentence_){
   	scontainer_.addChild(s_);
   	container_.addChild(b_);
   	container_.addChild(text_);
-  	setSnakeBody(container_,_body[i+1],calBodyDirection(i+1));
+  	setSnakeBody(container_,_body[i+1],calBodyDirection(i+1),false);
   	setSnakeBody(scontainer_,_body[i+1],calBodyDirection(i+1),true);
 
 
@@ -408,15 +499,15 @@ function resetSnake(sentence_){
   	_container_shadow.addChild(scontainer_);
   }
 
-  let tail_container=new Container();
-  let stail_container=new Container();
+  var tail_container=new Container();
+  var stail_container=new Container();
 
-  let tail=new Sprite(resources['img/snake/tail.png'].texture);
+  var tail=new Sprite(resources['img/snake/tail.png'].texture);
   tail.pivot.set(tail.width,tail.height/2);
   tail.scale.set(snake_scale,snake_scale);
   tail._zIndex=0;
   
-  let stail=new Sprite(resources['img/snake/shadow-tail.png'].texture);
+  var stail=new Sprite(resources['img/snake/shadow-tail.png'].texture);
   stail.pivot.set(stail.width,stail.height/2);
   stail.scale.set(snake_scale,snake_scale);
   stail._zIndex=0;
@@ -424,8 +515,13 @@ function resetSnake(sentence_){
   
   stail_container.addChild(stail);
   tail_container.addChild(tail);
-  setSnakeTail(tail_container,_body[len-1],landscape?180:-90);
-  setSnakeTail(stail_container,_body[len-1],landscape?180:-90,true);
+<<<<<<< HEAD
+  setSnakeTail(tail_container,_body[len-1],(_orientation==='landscape')?180:-90,false);
+  setSnakeTail(stail_container,_body[len-1],(_orientation==='landscape')?180:-90,true);
+=======
+  setSnakeTail(tail_container,_body[len-1],landscape?180:90);
+  setSnakeTail(stail_container,_body[len-1],landscape?180:90,true);
+>>>>>>> origin/master
   
   _container_snake.addChild(tail_container);
   _container_shadow.addChild(stail_container);
@@ -436,19 +532,20 @@ function resetSnake(sentence_){
 
 }
 
-function setSnakeHead(container_,pt,angle,isshadow=false){
+function setSnakeHead(container_,pt,angle,isshadow){
+
   // for(var i in container_.children){
-	  let sprite_=container_.children[0];
+	  var sprite_=container_.children[0];
 	  sprite_.angle=angle;
 	  
 	  sprite_.x=gwid*(pt.x+.5)+(gwid/2)*Math.cos(sprite_.rotation)+(isshadow?SHADOW_OFFSET:0);
 	  sprite_.y=gwid*(pt.y+.5)+(gwid/2)*Math.sin(sprite_.rotation)+(isshadow?SHADOW_OFFSET:0);
   // }
 }
-function setSnakeBody(container_,pt,direction,isshadow=false){
+function setSnakeBody(container_,pt,direction,isshadow){
 
 	try{
-	let sprite_=container_.children[0];
+	var sprite_=container_.children[0];
 
 	
 	switch(direction[0]){
@@ -476,7 +573,7 @@ function setSnakeBody(container_,pt,direction,isshadow=false){
 	sprite_.y=gwid*pt.y+(isshadow?SHADOW_OFFSET:0);
 
 	if(container_.children.length>1){
-		let text_=container_.children[1];
+		var text_=container_.children[1];
 	  	text_.x=sprite_.x+SHADOW_OFFSET+(sprite_.width-SHADOW_OFFSET*2)/2-text_.width/2;
 	  	text_.y=sprite_.y+SHADOW_OFFSET+(sprite_.height-SHADOW_OFFSET*2)/2-text_.height/2;
 	  	// text_.angle=direction[1];
@@ -485,9 +582,9 @@ function setSnakeBody(container_,pt,direction,isshadow=false){
   	console.log(err);
   }
 }
-function setSnakeTail(container_,pt,angle,isshadow=false){
+function setSnakeTail(container_,pt,angle,isshadow){
   // for(var i in container_.children){
-	  let sprite_=container_.children[0];
+	  var sprite_=container_.children[0];
 	  	
 	  sprite_.angle=angle;
 	  
@@ -498,7 +595,7 @@ function setSnakeTail(container_,pt,angle,isshadow=false){
 }
 
 function checkSnakePos(){
-	let pos_={x:_body[_body.length-1].x,y:_body[_body.length-1].y};
+	var pos_={x:_body[_body.length-1].x,y:_body[_body.length-1].y};
 	
 	/* check boundary */
 	if(pos_.x<0 || pos_.y<0 ||pos_.x>=mgridx ||pos_.y>=mgridy){
@@ -514,29 +611,56 @@ function checkSnakePos(){
 		}
 	}
 	/* check food*/
+<<<<<<< HEAD
+	var near_=false;
+=======
 	let near_=false;
+>>>>>>> origin/master
 	for(var i in _food){
 		
-		let mf=_food[i].word.length;
+		var mf=_food[i].word.length;
 		// console.log(mf);
 
 		for(var j in _food_pattern[i].pattern){
 
-			let ppx=_food[i].x+_food_pattern[i].pattern[j].x;
-		    let ppy=_food[i].y+_food_pattern[i].pattern[j].y;
+			var ppx=_food[i].x+_food_pattern[i].pattern[j].x;
+		    var ppy=_food[i].y+_food_pattern[i].pattern[j].y;
 		    
 		    if(ppx===pos_.x && ppy===pos_.y){
 
+<<<<<<< HEAD
 
 		    	playEatSound();
 
 
-		    	let w=_food[i].word;
+		    	var w=_food[i].word;
 				console.log('eat '+w);
 				_keyword.push(w);
 
 				_snake_vel-=SNAKE_ACCELERATE;
 				if(_snake_vel<SNAKE_VEL_MAX) _snake_vel=SNAKE_VEL_MAX;
+
+		    	var word_add=w+randomConnection();
+		    	_sentence+=word_add;
+		    	mf=word_add.length;
+		    	var klen=w.length;
+
+		    	//append tail
+		    	for(var k=0;k<mf;++k){
+		    		var wr={text:word_add[k],key:k<klen};
+		    		if(_word_eaten.length==0 && k==0){
+		    			appendTail(wr);
+		    			console.log("add tail now: "+wr);
+		    		}else 
+		    			_word_eaten.push(wr);
+=======
+
+		    	if(_play_sound) _sound_eat.play();
+
+
+		    	let w=_food[i].word;
+				console.log('eat '+w);
+				_keyword.push(w);
 
 		    	let word_add=w+randomConnection();
 		    	_sentence+=word_add;
@@ -548,6 +672,7 @@ function checkSnakePos(){
 		    		let wr={text:word_add[k],key:k<klen};
 		    		if(k==0) appendTail(wr);
 		    		else _word_eaten.push(wr);
+>>>>>>> origin/master
 		    	}
 				
 				clearFood();
@@ -557,7 +682,11 @@ function checkSnakePos(){
 		    	},FOOD_RESET_TIME);
 		    	return false;
 		    }else{
+<<<<<<< HEAD
+		    	var dist_=Math.sqrt(Math.pow(ppx-pos_.x,2)+Math.pow(ppy-pos_.y,2));
+=======
 		    	let dist_=Math.sqrt(Math.pow(ppx-pos_.x,2)+Math.pow(ppy-pos_.y,2));
+>>>>>>> origin/master
 		    	if(dist_<NEAR_FOOD_THRESHOLD)
 		    		near_=true;
 		    }
@@ -574,6 +703,18 @@ function checkSnakePos(){
 }
 function appendTail(text_){
 
+<<<<<<< HEAD
+	console.log('append: '+text_.text);
+
+	var dir_={x:_body[0].x-_body[1].x,y:_body[0].y-_body[1].y};
+	_body.splice(0,1);
+	_body.splice(0,1);
+
+	var tx=_body[0].x+dir_.x;
+	var ty=_body[0].y+dir_.y;
+	
+	//var mf=text_.text.length;
+=======
 	console.log('append: '+text_);
 
 	let dir_={x:_body[0].x-_body[1].x,y:_body[0].y-_body[1].y};
@@ -584,12 +725,34 @@ function appendTail(text_){
 	let ty=_body[0].y+dir_.y;
 	
 	//let mf=text_.text.length;
+>>>>>>> origin/master
 	for(var k=0;k<3;++k){
 		_body.unshift({x:tx,y:ty});
 		tx+=dir_.x;
 		tx+=dir_.y;
 	}
 	
+<<<<<<< HEAD
+	var tail_=_container_snake.removeChildAt(0);
+	var dot_=_container_snake.removeChildAt(0);
+
+	var stail_=_container_shadow.removeChildAt(0);
+	var sdot_=_container_shadow.removeChildAt(0);
+
+
+	// for(var k=0;k<mf;++k){
+	var container_=new Container();
+	var scontainer_=new Container();
+	var b_=new Sprite(_img_body[0]);
+  	b_.scale.set(snake_scale,snake_scale);
+  	b_._zIndex=0;
+
+	var s_=new Sprite(_shadow_body[0]);
+		s_.scale.set(snake_scale,snake_scale);
+		s_._zIndex=0;
+
+  	var ttext_=new PIXI.Text(text_.text,(text_.key)?_eaten_text_style:_snake_text_style);
+=======
 	let tail_=_container_snake.removeChildAt(0);
 	let dot_=_container_snake.removeChildAt(0);
 
@@ -609,6 +772,7 @@ function appendTail(text_){
 		s_._zIndex=0;
 
   	let ttext_=new PIXI.Text(text_.text,(text_.key)?_eaten_text_style:_snake_text_style);
+>>>>>>> origin/master
   	ttext_.scale.set(FONT_STRETCH,1);
 
   	scontainer_.addChild(s_);
@@ -629,13 +793,17 @@ function appendTail(text_){
 
 function killSnake(){
 	snake_stop=true;
-	let len=_container_snake.children.length;
+	var len=_container_snake.children.length;
 	_container_snake.getChildAt(len-1).children[0].texture=_img_head[2];
 	_container_shadow.getChildAt(len-1).children[0].texture=_shadow_head[2];
 	app.renderer.render(_container_snake);
 	app.ticker.remove(updateSnake);
 
+<<<<<<< HEAD
 	playDeadSound();
+=======
+	if(_play_sound) _sound_dead.play();
+>>>>>>> origin/master
 
 	_pre_shadow_pos.x=_container_shadow.x;
 	_pre_shadow_pos.y=_container_shadow.y;
@@ -643,6 +811,7 @@ function killSnake(){
 	_pre_body_pos.y=_container_snake.y;
 	
 	app.ticker.add(shakeBody);
+<<<<<<< HEAD
 	setTimeout(function(){
 		app.ticker.remove(shakeBody);
 		_container_snake.x=_pre_shadow_pos.x;
@@ -652,12 +821,27 @@ function killSnake(){
 	},800);
 
 	setTimeout(function(){
+=======
+	setTimeout(function(){
+		app.ticker.remove(shakeBody);
+		_container_snake.x=_pre_shadow_pos.x;
+		_container_snake.y=_pre_shadow_pos.y;
+		_container_shadow.x=_pre_shadow_pos.x;
+		_container_shadow.y=_pre_shadow_pos.y;
+	},800);
+
+	setTimeout(function(){
+>>>>>>> origin/master
 		goToResult();
 	},GG_TRANSITION_TIME);
 }
 function shakeBody(){
 
+<<<<<<< HEAD
+	var off_=10;
+=======
 	let off_=10;
+>>>>>>> origin/master
 
 	_container_snake.x=_pre_shadow_pos.x+Math.random()*off_-off_/2;
 	_container_snake.y=_pre_shadow_pos.y+Math.random()*off_-off_/2;
@@ -687,14 +871,14 @@ function goToResult(){
 function calBodyDirection(index_){
 
 	try{
-	let x1=_body[index_+1].x-_body[index_-1].x;
-	let y1=_body[index_+1].y-_body[index_-1].y;
+	var x1=_body[index_+1].x-_body[index_-1].x;
+	var y1=_body[index_+1].y-_body[index_-1].y;
 	
-	let x2=_body[index_+1].x-_body[index_].x;
-	let y2=_body[index_+1].y-_body[index_].y;
+	var x2=_body[index_+1].x-_body[index_].x;
+	var y2=_body[index_+1].y-_body[index_].y;
 
 
-	let ang=Math.floor(Math.atan2(y1,x1)*180/Math.PI);
+	var ang=Math.floor(Math.atan2(y1,x1)*180/Math.PI);
 	switch(ang){
 		case 0:
 		case 180:
@@ -724,11 +908,11 @@ function calBodyDirection(index_){
 	}
 }
 function calTailDirection(){
-	// let i=0;
+	// var i=0;
 	return Math.atan2(_body[1].y-_body[0].y,_body[1].x-_body[0].x)*180/Math.PI;
 }
 function getFoodOf(count_){
-	let result=_food_data.filter(function(item){
+	var result=_food_data.filter(function(item){
 		return item.mword===count_;
 	});
 	return result[Math.floor(Math.random()*result.length)];
@@ -755,12 +939,14 @@ function resetFood(){
 	for(var i=0;i<3;++i){
 
 		var key_=randomKeyword();
+		// if(!key_) continue;
+
 		var fp=getFoodOf(key_.length);
 		var f=generateFood(fp);
 
 		f.word=key_;
 
-		let ff=_container_food.getChildAt(i*2);
+		var ff=_container_food.getChildAt(i*2);
 
 		ff.getChildAt(0).texture=fp.texture;
 		ff.getChildAt(1).texture=fp.mask;
@@ -770,17 +956,18 @@ function resetFood(){
   		ff.x=gwid*f.x;
   		ff.y=gwid*f.y;
 
-  		let text_=_container_food.getChildAt(i*2+1);
+  		var text_=_container_food.getChildAt(i*2+1);
 		text_.removeChildren();
 		console.log('food of '+key_);
+		text_.x=gwid*f.x;
+  		text_.y=gwid*f.y;
 
-
-	  	let mf=key_.length;
+	  	var mf=key_.length;
 		for(var k=0;k<mf;++k){
-	  		let t_=new PIXI.Text(key_[k],_snake_text_style);
+	  		var t_=new PIXI.Text(key_[k],_snake_text_style);
 	  		t_.scale.set(FONT_STRETCH,1);
-	  		t_.x=ff.x+fp.pattern[k].x*gwid+gwid/2-t_.width/2;
-	  		t_.y=ff.y+fp.pattern[k].y*gwid+gwid/2-t_.height/2;
+	  		t_.x=fp.pattern[k].x*gwid+gwid/2-t_.width/2;
+	  		t_.y=fp.pattern[k].y*gwid+gwid/2-t_.height/2;
 	  		text_.addChild(t_);
   		}
 		// _container_food.addChild(ff);
@@ -794,7 +981,7 @@ function resetFood(){
 }
 function generateFood(food_data){
 
-	let mword=food_data.mword;
+	var mword=food_data.mword;
 
 	var x=null;
     var y=null;
@@ -809,8 +996,8 @@ function generateFood(food_data){
     	
     	for(var k in food_data.pattern){
 
-    		let px=x+food_data.pattern[k].x;
-    		let py=y+food_data.pattern[k].y;
+    		var px=x+food_data.pattern[k].x;
+    		var py=y+food_data.pattern[k].y;
     		//console.log('new food '+px+' , '+py);
 		    // check boundary
 		    if(px<0 || px>=mgridx || py<0 || py>=mgridy) 
@@ -818,11 +1005,11 @@ function generateFood(food_data){
 
 		    // check overlap
 		    for(var z in _food){
-		    	// let mf=_food[z].mword;
+		    	// var mf=_food[z].mword;
 		    	for(var q in _food_pattern[z].pattern){
 		    		
-		    		let ppx=_food[z].x+_food_pattern[z].pattern[q].x;
-		    		let ppy=_food[z].y+_food_pattern[z].pattern[q].y;
+		    		var ppx=_food[z].x+_food_pattern[z].pattern[q].x;
+		    		var ppy=_food[z].y+_food_pattern[z].pattern[q].y;
 		    		// console.log('old food '+ppx+' , '+ppy);
 		    		
 		    		//if(ppx===px && ppy===py) 
@@ -857,4 +1044,81 @@ function generateFood(food_data){
     };
 }
 
+function rotateVel(v_){
+	if(v_==='left') return 'up';
+	if(v_==='right') return 'down';
+	if(v_==='up') return 'left';
+	if(v_==='down') return 'right';
 
+}
+
+function rotateSnake(){
+
+	_vel=rotateVel(_vel);
+	_last_vel=rotateVel(_last_vel);
+	
+	var maxx=0,maxy=0;
+	var avx=0,avy=0;
+	for(var i=0;i<_body.length;++i){
+		if(_body[i].x>maxx) maxx=_body[i].x;
+		if(_body[i].y>maxy) maxy=_body[i].y;
+		avx+=_body[i].x;
+		avy+=_body[i].y;
+	}
+	avx=Math.floor(avx/_body.length);
+	avy=Math.floor(avy/_body.length);
+
+	// var offx=Math.floor(maxy/pre_mgridy*mgridx)-maxy;
+	// var offy=Math.floor(maxx/pre_mgridx*mgridy)-maxx;
+
+	var offx=Math.floor(avy/pre_mgridy*mgridx)-avy;
+	var offy=Math.floor(avx/pre_mgridx*mgridy)-avx;
+
+	for(var i=0;i<_body.length;++i){
+		var t=_body[i].x;
+		_body[i].x=Math.max(_body[i].y+offx,0);
+		_body[i].y=Math.max(t+offy,0);
+		// _body[i].x=Math.floor(_body[i].y/pre_mgridy*mgridx);
+		// _body[i].y=Math.floor(t/pre_mgridx*mgridy);
+
+	}
+	for(var i=0;i<_body.length;++i){	
+		if(i==_body.length-1){
+			var ang=(_orientation==='landscape')?90:0;
+			setSnakeHead(_container_snake.children[i],_body[i],ang,false);
+			setSnakeHead(_container_shadow.children[i],_body[i],ang,true);		
+		}else if(i!=0){
+			setSnakeBody(_container_snake.children[i],_body[i],calBodyDirection(i),false);
+			setSnakeBody(_container_shadow.children[i],_body[i],calBodyDirection(i),true);
+		}else{
+			setSnakeTail(_container_snake.children[i],_body[i],calTailDirection(),false);
+			setSnakeTail(_container_shadow.children[i],_body[i],calTailDirection(),true);		
+		} 
+	}	
+
+	// resetFood();
+}
+
+function resetFoodPos(){
+	
+
+	for(var i in _food){
+
+		var f=generateFood(_food_pattern[i]);
+
+		_food[i].x=f.x;
+		_food[i].y=f.y;
+
+		var ff=_container_food.getChildAt(i*2);
+
+		ff.x=gwid*f.x;
+		ff.y=gwid*f.y;
+
+		var text_=_container_food.getChildAt(i*2+1);
+		
+		text_.x=gwid*f.x;
+		text_.y=gwid*f.y;
+
+		
+	}
+}

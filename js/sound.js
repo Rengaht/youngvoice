@@ -1,4 +1,4 @@
-let _sound_back,_sound_eat,_sound_dead,_sound_pop,_sound_button;
+var _sound_back,_sound_eat,_sound_dead,_sound_pop,_sound_button;
 var _play_sound=true;
 
 function loadMusic(){  
@@ -34,6 +34,7 @@ function loadMusic(){
 }
 
 function  toggleMusic(){
+
     _play_sound=!_play_sound;
     if(!_play_sound){
       _sound_back.pause();
@@ -49,6 +50,9 @@ function  toggleMusic(){
 }
 
 function playBackMusic(){
+
+  if(_play_sound) return;
+
   console.log('play bgm!!');
   _play_sound=true;
   _sound_back.play();   

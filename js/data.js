@@ -1,8 +1,14 @@
 
-let DATA_URL="https://mmlab.com.tw/project/youngvoice/";
+// var DATA_URL="https://game.youngvoice.tw/";
+var DATA_URL="";
+var SQL_URL="https://game.youngvoice.tw/";
 
 var list_sentence,list_keyword,list_connection;
+<<<<<<< HEAD
+var _index_keyword={};
+=======
 var _index_keyword=0;
+>>>>>>> origin/master
 var _index_connection=0;
 
 var _sentence='';
@@ -13,17 +19,25 @@ var _snake_crop=null;
 var _output_container=null;
 
 function loadData(){
+<<<<<<< HEAD
 
 	$.getJSON(DATA_URL+"data/sentence.json",function(json){
 		list_sentence=json.start;
 		list_connection=json.connect;
 	});	
-	$.getJSON(DATA_URL+"data/keyword.json",function(json){
+	$.getJSON(DATA_URL+"data/keyword2.json",function(json){
 		list_keyword=json.keyword;
 	});
+	_index_keyword={"noun":0,"verb":0,"adj":0};
+
 	// list_sentence=loader.resources['data/sentence.json'].data.start;
 	// list_connection=loader.resources['data/sentence.json'].data.connect;
 	// list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
+=======
+	list_sentence=loader.resources['data/sentence.json'].data.start;
+	list_connection=loader.resources['data/sentence.json'].data.connect;
+	list_keyword=shuffle(loader.resources['data/keyword.json'].data.keyword);
+>>>>>>> origin/master
 
 }
 
@@ -56,10 +70,32 @@ var shuffle = function (array) {
 };
 
 function randomKeyword(){
-	// let key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
+	// var key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
 	// while(key_.length<2){
 	// 	key_=list_keyword[Math.floor(Math.random()*list_keyword.length)];
 	// }
+<<<<<<< HEAD
+	// try{
+		var type_=list_connection[_index_connection]["type"];
+
+		var key_=list_keyword[type_][_index_keyword[type_]];
+		_index_keyword[type_]++;
+
+		
+		if(_index_keyword[type_]>=list_keyword[type_].length){
+			_index_keyword[type_]=0;
+			list_keyword[type_]=shuffle(list_keyword[type_]);
+		}
+
+		return key_;
+	// }catch(e){
+	// 	console.log(e);
+	// 	return '甜';
+	// }
+}
+function randomConnection(){
+
+=======
 	let key_=list_keyword[_index_keyword];
 	_index_keyword++;
 	while(key_.length<2){
@@ -78,28 +114,35 @@ function randomConnection(){
 
 	let cnn=list_connection[_index_connection];
 
+>>>>>>> origin/master
 	_index_connection++;
 	if(_index_connection>=list_connection.length){
 		_index_connection=0;
 	}
 
+<<<<<<< HEAD
+	var cnn=list_connection[_index_connection]["word"];
+
+=======
+>>>>>>> origin/master
 	return cnn;
 }
 
 function renderImage(onFinish){
 
 	// var minx=wwid,miny=whei;
-	// let s_=_container_snake.children;
+<<<<<<< HEAD
+	// var s_=_container_snake.children;
 	// for(var k in s_){
-	// 	let tx=s_[k].getChildAt(0).x;
-	// 	let ty=s_[k].getChildAt(0).y;
+	// 	var tx=s_[k].getChildAt(0).x;
+	// 	var ty=s_[k].getChildAt(0).y;
 	// 	if(tx<minx) minx=tx;
 	// 	if(ty<miny) miny=ty;
 	// }
 	var minx=mgridx,miny=mgridy;	
 	for(var k in _body){
-		let tx=_body[k].x;
-		let ty=_body[k].y;
+		var tx=_body[k].x;
+		var ty=_body[k].y;
 		if(tx<minx) minx=tx;
 		if(ty<miny) miny=ty;
 	}
@@ -122,8 +165,8 @@ function renderImage(onFinish){
  //  	_container_tmp.mask=mask_;
 
 	app.renderer.render(_container_tmp);
-	let url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
-	document.getElementById('dead_snake').src=url_;
+	var url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
+	$('#dead_wrapper').css('background-image','url('+url_+')');
 
 	_container_tmp.removeChild(_snake_crop);
 	
@@ -131,6 +174,44 @@ function renderImage(onFinish){
 function uploadImage(){
 
 	_container_tmp.visible=true;
+=======
+	// let s_=_container_snake.children;
+	// for(var k in s_){
+	// 	let tx=s_[k].getChildAt(0).x;
+	// 	let ty=s_[k].getChildAt(0).y;
+	// 	if(tx<minx) minx=tx;
+	// 	if(ty<miny) miny=ty;
+	// }
+	var minx=mgridx,miny=mgridy;
+	//
+	for(var k in _body){
+		let tx=_body[k].x;
+		let ty=_body[k].y;
+		if(tx<minx) minx=tx;
+		if(ty<miny) miny=ty;
+	}
+	minx*=gwid;
+	miny*=gwid;
+
+	
+	let s_=_container_snake.children;
+	for(var k in s_){
+		s_[k].x-=minx;
+		s_[k].y-=miny;
+	}
+	let ss_=_container_shadow.children;
+	for(var k in ss_){
+		ss_[k].x-=minx;
+		ss_[k].y-=miny;
+	}
+
+// let tmp_=new Sprite(resources['img/logo.png'].texture);
+// tmp_.y=100;
+// _container_tmp.addChild(tmp_);
+	app.renderer.render(_container_tmp);
+	let url_=app.renderer.extract.canvas(_container_tmp).toDataURL('image/png');
+	document.getElementById('dead_snake').src=url_;
+>>>>>>> origin/master
 
 	// app.stage.removeChild(_container_game);	
 	if(_output_container===null) _output_container=new Container();
@@ -138,10 +219,10 @@ function uploadImage(){
 	_output_container.removeChildren();
 
 	_container_game.removeChild(_container_tmp);
-	let owid=Math.max(_snake_crop.width,600);
+	var owid=Math.max(_snake_crop.width,600);
 
-	let mx=Math.floor(owid/gwid);
-	let my=Math.floor(_snake_crop.height/gwid);
+	var mx=Math.floor(owid/gwid);
+	var my=Math.floor(_snake_crop.height/gwid);
 	_graphics_grid.clear();
 	for(var i=0;i<=mx;++i){
 	    for(var j=0;j<=my;++j){
@@ -198,18 +279,36 @@ function uploadImage(){
 	    });
 	}, 'image/png');
 
+<<<<<<< HEAD
 	
+=======
+	// formData.append('keyword','test');
+	$.ajax({
+        type: 'POST',
+        url: 'upload/action.php',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            console.log(data);
+            shareImage(data.url);
+        },
+        error: function(response) {
+            console.log(response.responseText);
+        }
+    });
+>>>>>>> origin/master
 
 }
 function shareImage(url_){
 
 	//alert('share image: '+url_);
 
-  let surl_='https://www.facebook.com/dialog/share?'
+  var surl_='https://www.facebook.com/dialog/share?'
   +'app_id=262109598012691'
   +'&hashtag='+encodeURIComponent('#青少年不簡單')
   +'&href='+encodeURIComponent(url_)
-  +'&redirect_uri='+encodeURIComponent('https://mmlab.com.tw/project/youngvoice/upload/redirect.html');
+  +'&redirect_uri='+encodeURIComponent('https://game.youngvoice.tw/upload/redirect.html');
 
   if(_mobile) window.location.href=surl_;
   else window.open(surl_,'_blank');
@@ -232,7 +331,7 @@ function getSample(){
 
 	$.ajax({
         type: 'POST',
-        url:DATA_URL+'upload/action.php',
+        url:SQL_URL+'upload/action.php',
         data: formData,
         processData: false,
         contentType: false,

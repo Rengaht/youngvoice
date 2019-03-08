@@ -16,8 +16,9 @@
 	require_once('utils/uuid.generator.php');
 
 	//error_reporting(0);
-	$request_url='https://mmlab.com.tw/project/youngvoice';
-	$share_url='https://mmlab.com.tw/project/youngvoice/upload/share.php?id=';
+	// $request_url='https://mmlab.com.tw/project/youngvoice';
+	$request_url='https://game.youngvoice.tw';
+	$share_url='https://game.youngvoice.tw/upload/share.php?id=';
 	$data_folder='/sample/';
 	// $data_folder='/youngvoice/sample/';
 
@@ -49,8 +50,10 @@
 				$get_keyword=isset($_POST['keyword']) ? $_POST['keyword'] : NULL;
 
 				$servername = "127.0.0.1";
-				$username = "young_viewer";
-				$password = "53913223";
+				// $username = "young_viewer";
+				// $password = "53913223";
+				$username = "mmlab";
+				$password = "27181133158";
 				$dbname = "db_youngvoice_game";
 
 				// Create connection
@@ -74,7 +77,7 @@
 				    while($row = $result->fetch_assoc()) {
 				        // echo $row;
 
-				        $json['title']=$row['year'].'/'.$row['title'].'/'.$row['author'];
+				        $json['title']=$row['year'].' / '.$row['title'].' / '.$row['author'];
 						$json['type']=$row['type'];
 						$json['text']=$row['text'];
 						$imgfile_=str_replace('.JPG','.jpg',$row['file']);
